@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Tone from 'tone';
 // Knob
 import { Knob } from 'react-rotary-knob';
@@ -15,7 +15,7 @@ const oscOptions = [
   { value: 'pwm', label: 'pwm' }
 ];
 
-const Instrument = ({ section }) => {
+const Instrument = ({ section, setInstrument }) => {
   const [instrumentType, setInstrumentType] = useState('Synth');
   const [osc, setOsc] = useState('triangle');
   const [envAttack, setEnvAttack] = useState(0);
@@ -38,7 +38,12 @@ const Instrument = ({ section }) => {
     }
   }).toMaster();
 
+  useEffect(() => {
+    setInstrument(simple);
+  }, [setInstrument]);
+
   simple.volume.value = volume;
+  simple.detune.value = detune;
 
   const handleVolumeChange = val => {
     const maxDistance = 39;
@@ -60,7 +65,13 @@ const Instrument = ({ section }) => {
         <div className="">
           <ChooseInstrument setInstrumentType={setInstrumentType} />
           <div id="oscillator-select">
-            <Select options={oscOptions} onChange={val => setOsc(val.value)} />
+            <Select
+              options={oscOptions}
+              onChange={val => {
+                setOsc(val.value);
+                setInstrument(simple);
+              }}
+            />
           </div>
           <div className="shadow-md border p-4">
             <div id="volume">
@@ -148,7 +159,6 @@ const Instrument = ({ section }) => {
           </div>
         </div>
       </div>
-      <PianoRoll synth={simple} />
     </div>
   );
 };

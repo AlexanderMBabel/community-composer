@@ -4,10 +4,13 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import createInitialGrid from '../../utils/createInitialGrid';
 import playGrid from '../../utils/playGrid';
 import numberToNote from '../../utils/numberToNote';
+import { melodyGrid } from '../../actions/grids';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // const synth = new Tone.FMSynth().toMaster();
 
-const PianoRoll = ({ synth }) => {
+const PianoRoll = ({ instrument, setGrid, melodyGrid }) => {
   const [noteName, setNoteName] = useState('');
   const [notes, setNotes] = useState(createInitialGrid());
   const [showBlockValue, setShowBlockValue] = useState(false);
@@ -18,11 +21,14 @@ const PianoRoll = ({ synth }) => {
 
   const stepClick = (note, step, stepValue) => {
     let tempNotes = notes;
-    synth.triggerAttackRelease(numberToNote(note), 0.5);
+    instrument.triggerAttackRelease(numberToNote(note), 0.5);
 
     tempNotes[note][step] = !tempNotes[note][step];
 
     setNotes(tempNotes);
+    setGrid(notes);
+    melodyGrid(notes);
+
     setShowBlockValue(!showBlockValue);
   };
 
@@ -52,4 +58,8 @@ const PianoRoll = ({ synth }) => {
   );
 };
 
-export default PianoRoll;
+PianoRoll.protoTypes = {
+  melodyGrid: PropTypes.func
+};
+
+export default connect(null, { melodyGrid })(PianoRoll);
