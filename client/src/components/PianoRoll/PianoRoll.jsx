@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import * as Tone from 'tone';
+import { Scrollbars } from 'react-custom-scrollbars';
 import createInitialGrid from '../../utils/createInitialGrid';
 import playGrid from '../../utils/playGrid';
 import numberToNote from '../../utils/numberToNote';
@@ -27,22 +28,24 @@ const PianoRoll = ({ synth }) => {
 
   return (
     <div>
-      <section id="grid" className="mx-auto container mt-5">
-        {notes.map((note, noteNumber) => (
-          <div key={noteNumber} className="flex">
-            {note.map((step, stepNumber) => (
-              <div
-                key={stepNumber}
-                className={`h-5 w-10 border border-teal-400 bg-gray-200 px-4 hover:bg-orange-200 ${notes[noteNumber][stepNumber] ? 'bg-red-500' : 'bg-red-200'}`}
-                onMouseOver={() => showNote(noteNumber, stepNumber)}
-                onClick={() => stepClick(noteNumber, stepNumber, step)}
-              >
-                {note}
-              </div>
-            ))}
-          </div>
-        ))}
-      </section>
+      <Scrollbars style={{ width: '900px', height: '300px' }}>
+        <section id="grid" className="mx-auto container mt-5">
+          {notes.map((note, noteNumber) => (
+            <div key={noteNumber} className="flex">
+              {note.map((step, stepNumber) => (
+                <div
+                  key={stepNumber}
+                  className={`h-5 w-10 border border-teal-400 bg-gray-200 px-4 hover:bg-orange-200 ${notes[noteNumber][stepNumber] ? 'bg-red-500' : 'bg-red-200'}`}
+                  onMouseOver={() => showNote(noteNumber, stepNumber)}
+                  onClick={() => stepClick(noteNumber, stepNumber, step)}
+                >
+                  {note}
+                </div>
+              ))}
+            </div>
+          ))}
+        </section>
+      </Scrollbars>
       <div>{noteName}</div>
       <div>{showBlockValue}</div>
     </div>
