@@ -2,32 +2,45 @@ import React, { useState } from 'react';
 import * as Tone from 'tone';
 import { Scrollbars } from 'react-custom-scrollbars';
 import createInitialGrid from '../../utils/createInitialGrid';
-import playGrid from '../../utils/playGrid';
+// import playGrid from '../../utils/playGrid';
 import numberToNote from '../../utils/numberToNote';
-import { melodyGrid } from '../../actions/grids';
+import { melodyGrid, bassGrid } from '../../actions/grids';
+
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // const synth = new Tone.FMSynth().toMaster();
 
-const PianoRoll = ({ instrument, setGrid, melodyGrid }) => {
+const PianoRoll = ({ melodyGrid, melodyInst, bassGrid, bassInst, section }) => {
   const [noteName, setNoteName] = useState('');
-  const [notes, setNotes] = useState(createInitialGrid());
+  const [notes, setNotes] = useState(createInitialGrid(24, 24));
+  const [bassNotes, setBassNotes] = useState(createInitialGrid(24, 24));
   const [showBlockValue, setShowBlockValue] = useState(false);
 
+  console.log(section);
   const showNote = (number, step) => {
     setNoteName(numberToNote(number));
   };
 
   const stepClick = (note, step, stepValue) => {
     let tempNotes = notes;
-    instrument.triggerAttackRelease(numberToNote(note), 0.5);
 
-    tempNotes[note][step] = !tempNotes[note][step];
+    if (section === 'melody') {
+      melodyInst.triggerAttackRelease(numberToNote(note), 0.5);
+      tempNotes[note][step] = !tempNotes[note][step];
 
-    setNotes(tempNotes);
-    setGrid(notes);
-    melodyGrid(notes);
+      setNotes(tempNotes);
+
+      melodyGrid(notes);
+    }
+    if (section === 'bass') {
+      bassInst.triggerAttackRelease(numberToNote(note + 24), 0.5);
+      tempNotes[note][step] = !tempNotes[note][step];
+
+      setNotes(tempNotes);
+
+      bassGrid(notes);
+    }
 
     setShowBlockValue(!showBlockValue);
   };
@@ -41,12 +54,10 @@ const PianoRoll = ({ instrument, setGrid, melodyGrid }) => {
               {note.map((step, stepNumber) => (
                 <div
                   key={stepNumber}
-                  className={`h-5 w-10 border border-teal-400 bg-gray-200 px-4 hover:bg-orange-200 ${notes[noteNumber][stepNumber] ? 'bg-red-500' : 'bg-red-200'}`}
+                  className={`h-5 w-10 border border-gray-600 bg-gray-200 px-4 hover:bg-orange-200 ${notes[noteNumber][stepNumber] ? 'theme-bg-gray' : 'theme-bg-light-tan'}`}
                   onMouseOver={() => showNote(noteNumber, stepNumber)}
                   onClick={() => stepClick(noteNumber, stepNumber, step)}
-                >
-                  {note}
-                </div>
+                ></div>
               ))}
             </div>
           ))}
@@ -59,7 +70,15 @@ const PianoRoll = ({ instrument, setGrid, melodyGrid }) => {
 };
 
 PianoRoll.protoTypes = {
-  melodyGrid: PropTypes.func
+  melodyGrid: PropTypes.func,
+  melodyInst: PropTypes.object.isRequired,
+  bassGrid: PropTypes.func.isRequired,
+  bassInst: PropTypes.object.isRequired
 };
 
-export default connect(null, { melodyGrid })(PianoRoll);
+const mapStateToProps = state => ({
+  melodyInst: state.instrumentReducer.melodyInst,
+  bassInst: state.instrumentReducer.bassInst
+});
+
+export default connect(mapStateToProps, { melodyGrid, bassGrid })(PianoRoll);

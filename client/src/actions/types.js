@@ -9,3 +9,6 @@ export const DUO_SYNTH = 'DUO_SYNTH';
 export const POLY_SYNTH = 'POLY_SYNTH';
 export const SAMPLER = 'SAMPLER';
 export const MELODY_INST = 'MELODY_INST';
+export const BEAT_INST = 'BEAT_INST';
+export const BASS_INST = 'BASS_INST';
+export const CHORD_INST = 'CHORD_INST';

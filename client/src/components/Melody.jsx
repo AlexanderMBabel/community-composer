@@ -9,11 +9,11 @@ const Melody = () => {
   const [instrument, setInstrument] = useState(null);
 
   return (
-    <div className="bg-orange-600 flex flex-wrap items-center justify-center flex-col">
-      <p className="font-bangers text-2xl ">Melody</p>
+    <div className="theme-bg-dark-blue flex flex-wrap items-center justify-center flex-col">
+      <p className="font-bangers text-4xl ">Melody</p>
 
-      <Instrument setInstrument={setInstrument} />
-      <PianoRoll instrument={instrument} />
+      <Instrument section="melody" setInstrument={setInstrument} />
+      <PianoRoll instrument={instrument} section="melody" />
     </div>
   );
 };

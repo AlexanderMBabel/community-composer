@@ -1,14 +1,18 @@
 import React from 'react';
-import PianoRoll from './components/PianoRoll/PianoRoll';
+
 import TransportControl from './components/TransportControl';
 import Melody from './components/Melody';
-
+import Beat from './components/Beat';
+import Bass from './components/Bass';
+import Chords from './components/Chords';
 function App() {
   return (
-    <div className=" bg-teal-100">
+    <div className=" bg-teal-100 font-lato">
       <TransportControl />
       <Melody />
-      <PianoRoll />
+      <Beat />
+      <Bass />
+      <Chords />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 const gridToPlayableGrid = grid => {
   let notesInGrid = [];
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 24; i++) {
     let notesInStep = [];
     grid.forEach((note, iter) => {
       //   console.log(note);

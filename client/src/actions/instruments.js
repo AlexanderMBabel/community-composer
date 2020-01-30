@@ -1,8 +1,22 @@
-import { FM_SYNTH, SIMPLE_SYNTH, SAMPLER, POLY_SYNTH, DUO_SYNTH, MELODY_INST } from './types';
+import { BEAT_INST, MELODY_INST, BASS_INST } from './types';
 
 export const melodyInstrument = instrument => dispatch => {
   dispatch({
     type: MELODY_INST,
+    payload: instrument
+  });
+};
+
+export const beatInstrument = instrument => dispatch => {
+  dispatch({
+    type: BEAT_INST,
+    payload: instrument
+  });
+};
+
+export const bassInstrument = instrument => dispatch => {
+  dispatch({
+    type: BASS_INST,
     payload: instrument
   });
 };

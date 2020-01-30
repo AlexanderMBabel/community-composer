@@ -3,9 +3,12 @@ import * as Tone from 'tone';
 // Knob
 import { Knob } from 'react-rotary-knob';
 import { s4 } from 'react-rotary-knob-skin-pack';
-import ChooseInstrument from './ChooseInstrument';
+
 import Select from 'react-select';
-import PianoRoll from './PianoRoll/PianoRoll';
+
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { melodyInstrument, bassInstrument } from '../actions/instruments';
 
 const oscOptions = [
   { value: 'sine', label: 'sine' },
@@ -15,7 +18,13 @@ const oscOptions = [
   { value: 'pwm', label: 'pwm' }
 ];
 
-const Instrument = ({ section, setInstrument }) => {
+const instOptions = [
+  { value: 'Synth', label: 'Simple Synth' },
+  { value: 'FMSynth', label: 'FM Synth' },
+  { value: 'DouSynth', label: 'Dual Osc Synth' }
+];
+
+const Instrument = ({ section, setInstrument, melodyInstrument, bassInstrument }) => {
   const [instrumentType, setInstrumentType] = useState('Synth');
   const [osc, setOsc] = useState('triangle');
   const [envAttack, setEnvAttack] = useState(0);
@@ -38,9 +47,80 @@ const Instrument = ({ section, setInstrument }) => {
     }
   }).toMaster();
 
+  let fmSynth = new Tone.FMSynth({
+    harmonicity: 3,
+    modulationIndex: 10,
+    detune: 0,
+    oscillator: {
+      type: 'sine'
+    },
+    envelope: {
+      attack: 0,
+      decay: 0.3,
+      sustain: 1.5,
+      release: 0.5
+    },
+    modulation: {
+      type: 'square'
+    },
+    modulationEnvelope: {
+      attack: 0.5,
+      decay: 0,
+      sustain: 1,
+      release: 0.5
+    }
+  }).toMaster();
+
+  let duoSynth = new Tone.DuoSynth({
+    vibratoAmount: 0.5,
+    vibratoRate: 5,
+    harmonicity: 1.5,
+    voice0: {
+      volume: -10,
+      portamento: 0,
+      oscillator: {
+        type: 'sine'
+      },
+      filterEnvelope: {
+        attack: 0,
+        decay: 0,
+        sustain: 1.5,
+        release: 1
+      },
+      envelope: {
+        attack: 0.01,
+        decay: 0,
+        sustain: 1,
+        release: 0.5
+      }
+    },
+    voice1: {
+      volume: -10,
+      portamento: 0,
+      oscillator: {
+        type: 'square'
+      },
+      filterEnvelope: {
+        attack: 0.01,
+        decay: 0,
+        sustain: 1,
+        release: 0.5
+      },
+      envelope: {
+        attack: 0,
+        decay: 0,
+        sustain: 1.5,
+        release: 0.9
+      }
+    }
+  }).toMaster();
+
+  const [currentInstrument, setCurrentInstrument] = useState(simple);
+
   useEffect(() => {
-    setInstrument(simple);
-  }, [setInstrument]);
+    melodyInstrument(currentInstrument);
+    bassInstrument(currentInstrument);
+  }, [osc, envAttack, envDecay, envSustain, envRelease, volume]);
 
   simple.volume.value = volume;
   simple.detune.value = detune;
@@ -55,21 +135,54 @@ const Instrument = ({ section, setInstrument }) => {
     }
   };
 
-  //   function changeAttack(val) {
-  //     setEnvAttack(val);
-  //   }
+  const instrumentChanger = val => {
+    if ((section = 'melody')) {
+      switch (val.value) {
+        case 'Synth':
+          setCurrentInstrument(simple);
+          melodyInstrument(currentInstrument);
+          break;
+        case 'FMSynth':
+          setCurrentInstrument(fmSynth);
+          melodyInstrument(currentInstrument);
+          break;
+        case 'DuoSynth':
+          setCurrentInstrument(duoSynth);
+          melodyInstrument(currentInstrument);
+          break;
+        default:
+          break;
+      }
+    }
+    if ((section = 'bass')) {
+      switch (val.value) {
+        case 'Synth':
+          bassInstrument(simple);
+          break;
+        case 'FMSynth':
+          bassInstrument(fmSynth);
+          break;
+        case 'DuoSynth':
+          bassInstrument(duoSynth);
+          break;
+        default:
+          break;
+      }
+    }
+  };
   return (
     <div>
-      <div className="flex flex-col">
+      <div className="flex flex-col relative">
         <p>{instrumentType}</p>
+        <div className="absolute top-0 right-0">
+          <Select options={instOptions} onChange={instrumentChanger} />
+        </div>
         <div className="">
-          <ChooseInstrument setInstrumentType={setInstrumentType} />
           <div id="oscillator-select">
             <Select
               options={oscOptions}
               onChange={val => {
                 setOsc(val.value);
-                setInstrument(simple);
               }}
             />
           </div>
@@ -105,7 +218,7 @@ const Instrument = ({ section, setInstrument }) => {
                 value={envAttack}
                 skin={s4}
                 min={0}
-                max={5}
+                max={2}
                 step={0.1}
                 unlockDistance={0}
               />
@@ -135,7 +248,7 @@ const Instrument = ({ section, setInstrument }) => {
                 value={envSustain}
                 skin={s4}
                 min={0}
-                max={20}
+                max={3}
                 step={0.1}
                 unlockDistance={0}
               />
@@ -163,4 +276,9 @@ const Instrument = ({ section, setInstrument }) => {
   );
 };
 
-export default Instrument;
+Instrument.protoTypes = {
+  melodyInstrument: PropTypes.func.isRequired,
+  bassInstrument: PropTypes.func.isRequired
+};
+
+export default connect(null, { melodyInstrument, bassInstrument })(Instrument);
