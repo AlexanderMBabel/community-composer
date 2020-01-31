@@ -7,7 +7,7 @@ import Bass from './components/Bass';
 import Chords from './components/Chords';
 function App() {
   return (
-    <div className=" bg-teal-100 font-lato">
+    <div className=" theme-bg-dark-blue font-lato">
       <TransportControl />
       <Melody />
       <Beat />

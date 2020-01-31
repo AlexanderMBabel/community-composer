@@ -1,4 +1,4 @@
-import { MELODY_INST, BEAT_INST, BASS_INST } from '../actions/types';
+import { MELODY_INST, BEAT_INST, BASS_INST, CHORD_INST } from '../actions/types';
 
 const initialState = {
   melodyInst: null,
@@ -16,6 +16,8 @@ export default (state = initialState, action) => {
       return { ...state, beatInst: payload };
     case BASS_INST:
       return { ...state, bassInst: payload };
+    case CHORD_INST:
+      return { ...state, chordInst: payload };
     default:
       return state;
   }

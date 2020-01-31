@@ -171,13 +171,15 @@ const Instrument = ({ section, setInstrument, melodyInstrument, bassInstrument }
     }
   };
   return (
-    <div>
-      <div className="flex flex-col relative">
+    <div className="w-3/4">
+      <div className="flex flex-col items-center rounded-lg shadow-lg relative  border-gray-900 border-4">
         <p>{instrumentType}</p>
-        <div className="absolute top-0 right-0">
+        <div className="absolute top-0 right-0 w-1/5">
+          <div>Choose Instrument</div>
           <Select options={instOptions} onChange={instrumentChanger} />
         </div>
         <div className="">
+          <p>Choose Oscillator</p>
           <div id="oscillator-select">
             <Select
               options={oscOptions}
@@ -186,7 +188,7 @@ const Instrument = ({ section, setInstrument, melodyInstrument, bassInstrument }
               }}
             />
           </div>
-          <div className="shadow-md border p-4">
+          <div className="shadow-md  theme-border-red p-4">
             <div id="volume">
               <Knob className="w-7 h-7 m-2" onChange={handleVolumeChange} value={volume} skin={s4} min={-50} max={10} rotateDegrees={180} />
               <p className="text-xs">{volume.toFixed(2)}</p>
@@ -208,7 +210,7 @@ const Instrument = ({ section, setInstrument, melodyInstrument, bassInstrument }
               <p>Detune</p>
             </div>
           </div>
-          <div id="envelope" className="border shadow-md p-5 flex">
+          <div id="envelope" className="border theme-border-red shadow-md p-5 flex">
             <div>
               <Knob
                 className="w-5 h-5 m-2"

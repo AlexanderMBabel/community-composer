@@ -41,7 +41,9 @@ const DrumRoll = ({ beatInst, beatGrid }) => {
               <div
                 ket={stepNumber}
                 onClick={() => stepClick(drumNumber, stepNumber)}
-                className={`h-6 w-10 border border-teal-100  px-4 hover:bg-blue-700 ${drums[drumNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'}`}
+                className={`h-6 w-10 border border-teal-100  px-4 hover:bg-blue-700 ${drums[drumNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'} ${(stepNumber + 1) %
+                  4 ===
+                  0 && 'border-r-4'}`}
               ></div>
             ))}
           </div>

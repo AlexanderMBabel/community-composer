@@ -49,12 +49,19 @@ const PianoRoll = ({ melodyGrid, melodyInst, bassGrid, bassInst, section }) => {
     <div>
       <Scrollbars style={{ width: '900px', height: '300px' }}>
         <section id="grid" className="mx-auto container mt-5">
+          {/* <div className=" flex flex-row">
+            {notes[0].map((steps, stepNumber) => (
+              <div style={{ margin: '15px' }}>{stepNumber + 1}</div>
+            ))}
+          </div> */}
           {notes.map((note, noteNumber) => (
             <div key={noteNumber} className="flex">
               {note.map((step, stepNumber) => (
                 <div
                   key={stepNumber}
-                  className={`h-5 w-10 border border-gray-600 bg-gray-200 px-4 hover:bg-orange-200 ${notes[noteNumber][stepNumber] ? 'theme-bg-gray' : 'theme-bg-light-tan'}`}
+                  className={`h-5 w-10 border border-gray-200 bg-gray-200 px-4 hover:bg-orange-200 ${
+                    notes[noteNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'
+                  } ${(stepNumber + 1) % 4 === 0 && 'border-r-4 '}`}
                   onMouseOver={() => showNote(noteNumber, stepNumber)}
                   onClick={() => stepClick(noteNumber, stepNumber, step)}
                 ></div>

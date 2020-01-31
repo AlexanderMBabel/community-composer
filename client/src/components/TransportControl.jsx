@@ -7,9 +7,9 @@ import gridToPlayableGrid from '../utils/gridToPlayableGrid';
 import { MdPlayArrow, MdStop } from 'react-icons/md';
 import { melodyGrid } from '../actions/grids';
 import numberToNote from '../utils/numberToNote';
-import { melodyInstrument } from '../actions/instruments';
+import { melodyInstrument, chordInstrument } from '../actions/instruments';
 
-const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst }) => {
+const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst, chords, chordInst }) => {
   const [currentInstrument, setCurrentistrument] = useState(null);
   //   const [currentMelody, setCurrentMelody] = useState(null)
 
@@ -26,7 +26,7 @@ const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst }
     repeat(time);
   }, '8n');
 
-  console.log('bass', bass, 'melody', melody);
+  console.log('bass', bass, 'melody', melody, 'chord', chords);
   // stops then starts tranport when sound changes are made
   useEffect(() => {
     let isPlaying = Tone.Transport.state;
@@ -82,14 +82,21 @@ const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst }
       let bass = playableBass[step].map(note => numberToNote(note + 24));
       bassInst.triggerAttackRelease(bass[0], 0);
     }
+    if (chords[index].length > 0) {
+      chordInst.triggerAttackRelease(chords[step], '16n');
+    }
     index++;
   };
   return (
-    <div className="theme-bg-gray flex items-center justify-center">
-      <div onClick={play} className="p-3 theme-bg-light-tan m-2 rounded-r-sm hover:bg-indigo-600 active:bg-green-200">
+    <div className="theme-bg-gray  flex items-center justify-center relative" style={{ height: '10vh' }}>
+      <div className="absolute top-0 left-0">
+        <div className="text-gray-100 font-bangers text-4xl mt-3 ml-5">CC</div>
+        <div className="text-gray-100">Community Composer</div>
+      </div>
+      <div onClick={play} className="p-3 theme-bg-light-blue m-2 border rounded-r-sm hover:bg-blue-600 active:bg-green-200">
         <MdPlayArrow className=" " />
       </div>
-      <div onClick={stop} className="p-3 theme-bg-light-tan m-2 rounded-sm hover:bg-indigo-600 active:bg-red-200">
+      <div onClick={stop} className="p-3 theme-bg-light-blue border m-2 rounded-sm hover:bg-blue-600 active:bg-red-200">
         <MdStop />
       </div>
     </div>
@@ -100,9 +107,11 @@ TransportControl.protoTypes = {
   melody: PropTypes.array.isRequired,
   beat: PropTypes.array.isRequired,
   bass: PropTypes.array.isRequired,
+  chords: PropTypes.array.isRequired,
   melodyInst: PropTypes.object.isRequired,
   beatInst: PropTypes.object.isRequired,
-  bassInst: PropTypes.object.isRequired
+  bassInst: PropTypes.object.isRequired,
+  chordInst: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -110,9 +119,11 @@ const mapStateToProps = state => ({
   melody: state.sectionsGridReducer.melodyGrid,
   beat: state.sectionsGridReducer.beatGrid,
   bass: state.sectionsGridReducer.bassGrid,
+  chords: state.sectionsGridReducer.chordGrid,
   melodyInst: state.instrumentReducer.melodyInst,
   beatInst: state.instrumentReducer.beatInst,
-  bassInst: state.instrumentReducer.bassInst
+  bassInst: state.instrumentReducer.bassInst,
+  chordInst: state.instrumentReducer.chordInst
 });
 
 export default connect(mapStateToProps)(TransportControl);
