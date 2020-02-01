@@ -9,7 +9,7 @@
 /* fonts */
 
 .font-bangers {
-  font-family: 'Bangers', cursive;
+  font-family: 'Sigmar One', cursive;
 }
 .font-sigmar {
   font-family: 'Sigmar One', cursive;
@@ -54,4 +54,10 @@
 .theme-border-maroon {
   border-width: 2px;
   border-color: #da7b93;
+}
+
+/* Rotation */
+
+.rotate-90 {
+  transform: rotate(-90deg);
 }

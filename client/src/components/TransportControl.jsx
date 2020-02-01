@@ -48,7 +48,7 @@ const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst, 
     if (isPlaying === 'started') {
       play();
     }
-  }, [melody]);
+  }, [melody, chords, bass]);
 
   // start loop
   const play = () => {
@@ -82,8 +82,9 @@ const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst, 
       let bass = playableBass[step].map(note => numberToNote(note + 24));
       bassInst.triggerAttackRelease(bass[0], 0);
     }
-    if (chords[index].length > 0) {
-      chordInst.triggerAttackRelease(chords[step], '16n');
+    console.log(step);
+    if (chords[step].length > 0) {
+      chordInst.triggerAttackRelease(chords[step], '8n');
     }
     index++;
   };

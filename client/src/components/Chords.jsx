@@ -41,12 +41,15 @@ const progressionOptions = [
   { value: [0, 3, 4], label: 'I7 IV7 V7' }
 ];
 
-const styleOptions = [{ value: [0, 'space', 0, 0, 1, 'space', 1, 'space', 2, 2, 'space', 1], label: 'basic' }];
+const styleOptions = [
+  { value: [0, 'space', 0, 0, 1, 'space', 1, 'space', 2, 2, 'space', 1], label: 'basic' },
+  { value: [0, 'space', 'space', 1, 'space', 'space', 2, 'space', 'space', 1, 'space', 2], label: 'basic2' }
+];
 const Chords = ({ chordGrid }) => {
   const [key, setKey] = useState(0);
   const [scale, setScale] = useState([2, 2, 1, 2, 2, 2]);
   const [progression, setProgression] = useState([0, 3, 4]);
-  const [style, setStyles] = useState([0, 'space', 0, 0, 1, 'space', 1, 'space', 2, 2, 'space', 1]);
+  const [style, setStyle] = useState([0, 'space', 0, 0, 1, 'space', 1, 'space', 2, 2, 'space', 1]);
 
   let chordProgression = chordProgressionGenerator(scale, key, progression, style);
   chordGrid(chordProgression);
@@ -54,7 +57,7 @@ const Chords = ({ chordGrid }) => {
   return (
     <div>
       <section className=" flex flex-wrap items-center justify-center flex-col">
-        <div className="font-bangers text-4xl font-bold">Chord Progression</div>
+        <div className="font-lato text-3xl w-full theme-bg-yellow text-center my-5  font-bold">Chord Progression</div>
         <PolySynth />
         <section className="flex flex-wrap w-full items-center justify-center">
           <div className="w-1/6">
@@ -68,6 +71,10 @@ const Chords = ({ chordGrid }) => {
           <div className="w-1/6">
             <p>Progression</p>
             <Select className="w-full" options={progressionOptions} onChange={val => setProgression(val.value)} defaultValue={progressionOptions[0]} />
+          </div>
+          <div className="w-1/6">
+            <p>Style</p>
+            <Select className="w-full" options={styleOptions} onChange={val => setStyle(val.value)} defaultValue={styleOptions[0]} />
           </div>
         </section>
       </section>

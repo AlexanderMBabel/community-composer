@@ -1,7 +1,6 @@
 import { MELODY_GRID, BASS_GRID, BEAT_GRID, CHORD_GRID } from './types';
 
 export const melodyGrid = grid => dispatch => {
-  console.log(grid);
   dispatch({
     type: MELODY_GRID,
     payload: grid

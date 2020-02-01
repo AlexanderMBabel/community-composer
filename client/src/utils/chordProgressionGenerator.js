@@ -1,9 +1,5 @@
 import chordNumberToNote from './chordNumberToNote';
 
-// Generate chromatic scale array
-
-const chromatic = new Array(12);
-
 //  Generate requested scale as a 7 number array using number 0-11 to represent notes A - G#
 
 export const generateScale = scaleSteps => {
@@ -37,7 +33,7 @@ export const createChord = scale => {
 };
 
 export const createPattern = (chords, pattern) => {
-  const numberOfChords = chords.length;
+  // const numberOfChords = chords.length;
   let patternGrid = [];
   pattern.forEach(step => {
     if (step === 'space') {
@@ -55,6 +51,12 @@ const chordProgressionGenerator = (scaleType, key, progression, pattern) => {
   let chordProgression = generateProgression(transposedScale, progression);
   let chordPattern = createPattern(chordProgression, pattern);
   return chordPattern;
+};
+
+export const changeStlyeOnProgressionLength = (progression, style) => {
+  if (progression.length === 4) {
+    style.map(step => step === 'space' && 3);
+  }
 };
 
 export default chordProgressionGenerator;

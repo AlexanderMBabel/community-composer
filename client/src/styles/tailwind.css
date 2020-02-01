@@ -10644,7 +10644,7 @@ video {
 /* fonts */
 
 .font-bangers {
-  font-family: 'Bangers', cursive;
+  font-family: 'Sigmar One', cursive;
 }
 
 .font-sigmar {
@@ -10699,6 +10699,13 @@ video {
 .theme-border-maroon {
   border-width: 2px;
   border-color: #da7b93;
+}
+
+/* Rotation */
+
+.rotate-90 {
+  -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg);
 }
 
 @media (min-width: 640px){
