@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import { chordGrid } from '../actions/grids';
 import PropTypes from 'prop-types';
-import chordProgressionGenerator, { generateScale, transposeScale } from '../utils/chordProgressionGenerator';
+import chordProgressionGenerator from '../utils/chordProgressionGenerator';
 
 import PolySynth from './instruments/PolySynth';
 
@@ -43,7 +43,8 @@ const progressionOptions = [
 
 const styleOptions = [
   { value: [0, 'space', 0, 0, 1, 'space', 1, 'space', 2, 2, 'space', 1], label: 'basic' },
-  { value: [0, 'space', 'space', 1, 'space', 'space', 2, 'space', 'space', 1, 'space', 2], label: 'basic2' }
+  { value: [0, 'space', 'space', 1, 'space', 'space', 2, 'space', 'space', 1, 'space', 2], label: 'basic2' },
+  { value: ['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'], label: 'stop' }
 ];
 const Chords = ({ chordGrid }) => {
   const [key, setKey] = useState(0);

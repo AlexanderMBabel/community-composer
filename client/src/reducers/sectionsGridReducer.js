@@ -1,10 +1,11 @@
-import { BEAT_GRID, MELODY_GRID, BASS_GRID, CHORD_GRID } from '../actions/types';
+import { BEAT_GRID, MELODY_GRID, BASS_GRID, CHORD_GRID, UPDATE_GRID } from '../actions/types';
 
 const initialState = {
   melodyGrid: [],
   chordGrid: [],
   beatGrid: [],
-  bassGrid: []
+  bassGrid: [],
+  gridUpdated: false
 };
 
 export default (state = initialState, action) => {
@@ -28,6 +29,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         chordGrid: action.payload
+      };
+    case UPDATE_GRID:
+      return {
+        ...state,
+        gridUpdated: action.payload
       };
 
     default:

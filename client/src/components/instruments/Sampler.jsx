@@ -8,16 +8,28 @@ import PropTypes from 'prop-types';
 import { Knob } from 'react-rotary-knob';
 import { s7 } from 'react-rotary-knob-skin-pack';
 
+import kick from '../../beats/kickBroke.wav';
+import snareDrum from '../../beats/snareDrip.wav';
+import clap from '../../beats/claspSleep.wav';
+import hhClosed from '../../beats/hatsClosedCyber.wav';
+import hhopen from '../../beats/hatsopenFriends.wav';
+import snap from '../../beats/snapWater.wav';
+import percA from '../../beats/percAwar.wav';
+import percB from '../../beats/percSeek.wav';
+// import kick from '../../beats/kickBroke.wav'
+
 const Sampler = ({ beatInstrument }) => {
   // let buffer = new Tone.Buffer('../../sounds/drums/KICKS/broke.wav')
   // create sampler
   let samplerInst = new Tone.Sampler({
-    B4: 'https://freewavesamples.com/files/Bass-Drum-1.wav',
-    Bb4: 'https://freewavesamples.com/files/Ensoniq-ESQ-1-Snare-2.wav',
-    A4: 'https://freewavesamples.com/files/Ensoniq-SQ-1-Side-Stick.wav',
-    'G#4': 'https://freewavesamples.com/files/Ensoniq-SQ-1-Open-Hi-Hat.wav',
-    G4: 'https://freewavesamples.com/files/Kawai-K1r-Closed-Hi-Hat.wav',
-    'F#4': 'https://freewavesamples.com/files/Crash-Cymbal-1.wav'
+    B4: kick,
+    Bb4: snareDrum,
+    A4: clap,
+    'G#4': hhClosed,
+    G4: hhopen,
+    'F#4': snap,
+    F4: percA,
+    E4: percB
   }).toMaster();
 
   beatInstrument(samplerInst);

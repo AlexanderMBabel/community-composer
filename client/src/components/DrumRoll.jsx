@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import createInitialGrid from '../utils/createInitialGrid';
-import { MdNote } from 'react-icons/md';
+
 import { connect } from 'react-redux';
 
 import { beatGrid } from '../actions/grids';
@@ -39,7 +39,7 @@ const DrumRoll = ({ beatInst, beatGrid }) => {
           <div key={drumNumber} className="flex">
             {drum.map((step, stepNumber) => (
               <div
-                ket={stepNumber}
+                key={stepNumber}
                 onClick={() => stepClick(drumNumber, stepNumber)}
                 className={`h-6 w-10 border border-teal-100  px-4 hover:bg-blue-700 ${drums[drumNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'} ${(stepNumber + 1) %
                   4 ===

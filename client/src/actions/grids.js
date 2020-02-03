@@ -1,4 +1,4 @@
-import { MELODY_GRID, BASS_GRID, BEAT_GRID, CHORD_GRID } from './types';
+import { MELODY_GRID, BASS_GRID, BEAT_GRID, CHORD_GRID, UPDATE_GRID } from './types';
 
 export const melodyGrid = grid => dispatch => {
   dispatch({
@@ -22,5 +22,12 @@ export const chordGrid = grid => dispatch => {
   dispatch({
     type: CHORD_GRID,
     payload: grid
+  });
+};
+
+export const updateGrid = isChanged => dispatch => {
+  dispatch({
+    type: UPDATE_GRID,
+    payload: isChanged
   });
 };

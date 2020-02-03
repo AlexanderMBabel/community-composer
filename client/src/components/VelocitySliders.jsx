@@ -1,34 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Slider, { Range } from 'rc-slider';
+import Slider from 'rc-slider';
 import { melodyVel, bassVel, beatVel } from '../actions/velocity';
 import 'rc-slider/assets/index.css';
 
-const VelocitySliders = ({ numberOfSteps, section }) => {
-  console.log(numberOfSteps);
-  const [stepsArr, setStepsArr] = useState(new Array(numberOfSteps).fill(0));
+const VelocitySliders = ({ numberOfSteps, section, melodyVel, bassVel, beatVel }) => {
+  const [stepsArr, setStepsArr] = useState(new Array(numberOfSteps).fill(1));
 
-  switch (section) {
-    case 'melody':
-      melodyVel(stepsArr);
-      break;
-    case 'bass':
-      bassVel(stepsArr);
-      break;
-    case 'beat':
-      beatVel(stepsArr);
-      break;
-    default:
-      break;
-  }
+  useEffect(() => {
+    switch (section) {
+      case 'melody':
+        melodyVel(stepsArr);
+        break;
+      case 'bass':
+        bassVel(stepsArr);
+        break;
+      case 'beat':
+        beatVel(stepsArr);
+        break;
+      default:
+        break;
+    }
+  }, [stepsArr, bassVel, beatVel, melodyVel, section]);
 
   return (
     <div>
       <p className="text-gray-800 text-2xl text-center">Velocity</p>
       <div className="flex flex-row">
         {stepsArr.map((step, stepIter) => (
-          <div className="" style={{ height: '10vh' }}>
+          <div key={stepIter} className="" style={{ height: '10vh' }}>
             <Slider
               style={{ padding: '0px 19px 0px 19px' }}
               vertical={true}
@@ -37,6 +38,10 @@ const VelocitySliders = ({ numberOfSteps, section }) => {
                 tempSteps[stepIter] = val;
                 setStepsArr(tempSteps);
               }}
+              max={1}
+              min={0}
+              step={0.1}
+              defaultValue={1}
             />
           </div>
         ))}
@@ -46,11 +51,14 @@ const VelocitySliders = ({ numberOfSteps, section }) => {
 };
 
 VelocitySliders.prototype = {
-  numberOfSteps: PropTypes.number.isRequired
+  numberOfSteps: PropTypes.number.isRequired,
+  melodyVel: PropTypes.func.isRequired,
+  beatVel: PropTypes.func.isRequired,
+  bassVel: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   numberOfSteps: state.universalReducer.steps
 });
 
-export default connect(mapStateToProps)(VelocitySliders);
+export default connect(mapStateToProps, { melodyVel, beatVel, bassVel })(VelocitySliders);

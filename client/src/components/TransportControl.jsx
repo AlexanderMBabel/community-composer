@@ -5,12 +5,10 @@ import * as Tone from 'tone';
 import gridToPlayableGrid from '../utils/gridToPlayableGrid';
 
 import { MdPlayArrow, MdStop } from 'react-icons/md';
-import { melodyGrid } from '../actions/grids';
-import numberToNote from '../utils/numberToNote';
-import { melodyInstrument, chordInstrument } from '../actions/instruments';
 
-const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst, chords, chordInst }) => {
-  const [currentInstrument, setCurrentistrument] = useState(null);
+import numberToNote from '../utils/numberToNote';
+
+const TransportControl = ({ melody, melodyInst, melodyVel, beat, beatInst, beatVel, bass, bassInst, bassVel, chords, chordInst, chordVel, gridIsUpdated }) => {
   //   const [currentMelody, setCurrentMelody] = useState(null)
 
   let index = 0;
@@ -26,7 +24,7 @@ const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst, 
     repeat(time);
   }, '8n');
 
-  console.log('bass', bass, 'melody', melody, 'chord', chords);
+  // console.log('bass', bass, 'melody', melody, 'chord', chords);
   // stops then starts tranport when sound changes are made
   useEffect(() => {
     let isPlaying = Tone.Transport.state;
@@ -34,8 +32,6 @@ const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst, 
     if (isPlaying === 'started') {
       Tone.Transport.start();
     }
-
-    setCurrentistrument(melodyInstrument);
   }, [melodyInst]);
 
   /* stops then starts transport when grid changes are made
@@ -48,7 +44,7 @@ const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst, 
     if (isPlaying === 'started') {
       play();
     }
-  }, [melody, chords, bass]);
+  }, [melody, chords, bass, melodyInst, bassInst, gridIsUpdated]);
 
   // start loop
   const play = () => {
@@ -71,18 +67,18 @@ const TransportControl = ({ melody, melodyInst, beat, beatInst, bass, bassInst, 
     //melody section
     if (playableMelody[step].length > 0) {
       let notes = playableMelody[step].map(note => numberToNote(note));
-      melodyInst.triggerAttackRelease(notes[0], 0);
+      melodyInst.triggerAttackRelease(notes[0], '8n', '+0', melodyVel[step]);
     }
     if (playableBeat[step].length > 0) {
       let beats = playableBeat[step].map(note => numberToNote(note));
 
-      beatInst.triggerAttack(beats);
+      beatInst.triggerAttack(beats, '+0', beatVel[step]);
     }
     if (playableBass[step].length > 0) {
       let bass = playableBass[step].map(note => numberToNote(note + 24));
-      bassInst.triggerAttackRelease(bass[0], 0);
+      bassInst.triggerAttackRelease(bass[0], '8n', '+0', bassVel[step]);
     }
-    console.log(step);
+
     if (chords[step].length > 0) {
       chordInst.triggerAttackRelease(chords[step], '8n');
     }
@@ -112,7 +108,12 @@ TransportControl.protoTypes = {
   melodyInst: PropTypes.object.isRequired,
   beatInst: PropTypes.object.isRequired,
   bassInst: PropTypes.object.isRequired,
-  chordInst: PropTypes.object.isRequired
+  chordInst: PropTypes.object.isRequired,
+  melodyVel: PropTypes.array.isRequired,
+  beatVel: PropTypes.array.isRequired,
+  bassVel: PropTypes.array.isRequired,
+  chordVel: PropTypes.array.isRequired,
+  gridIsUpdated: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -124,7 +125,12 @@ const mapStateToProps = state => ({
   melodyInst: state.instrumentReducer.melodyInst,
   beatInst: state.instrumentReducer.beatInst,
   bassInst: state.instrumentReducer.bassInst,
-  chordInst: state.instrumentReducer.chordInst
+  chordInst: state.instrumentReducer.chordInst,
+  melodyVel: state.velocityReducer.melodyVel,
+  beatVel: state.velocityReducer.beatVel,
+  bassVel: state.velocityReducer.bassVel,
+  chordVel: state.velocityReducer.chordVel,
+  gridIsUpdated: state.sectionsGridReducer.gridUpdated
 });
 
 export default connect(mapStateToProps)(TransportControl);

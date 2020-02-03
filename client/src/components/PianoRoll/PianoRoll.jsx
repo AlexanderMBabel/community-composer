@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
-import * as Tone from 'tone';
+
 import { Scrollbars } from 'react-custom-scrollbars';
 import createInitialGrid from '../../utils/createInitialGrid';
 // import playGrid from '../../utils/playGrid';
 import numberToNote from '../../utils/numberToNote';
-import { melodyGrid, bassGrid } from '../../actions/grids';
+import { melodyGrid, bassGrid, updateGrid } from '../../actions/grids';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // const synth = new Tone.FMSynth().toMaster();
 
-const PianoRoll = ({ melodyGrid, melodyInst, bassGrid, bassInst, section }) => {
+const PianoRoll = ({ melodyGrid, melodyInst, bassGrid, bassInst, section, updateGrid, gridIsUpdated }) => {
   const [noteName, setNoteName] = useState('');
   const [notes, setNotes] = useState(createInitialGrid(24, 24));
-  const [bassNotes, setBassNotes] = useState(createInitialGrid(24, 24));
+
   const [showBlockValue, setShowBlockValue] = useState(false);
 
-  console.log(section);
   const showNote = (number, step) => {
     setNoteName(numberToNote(number));
   };
@@ -41,7 +40,7 @@ const PianoRoll = ({ melodyGrid, melodyInst, bassGrid, bassInst, section }) => {
 
       bassGrid(notes);
     }
-
+    updateGrid(!gridIsUpdated);
     setShowBlockValue(!showBlockValue);
   };
 
@@ -80,12 +79,15 @@ PianoRoll.protoTypes = {
   melodyGrid: PropTypes.func,
   melodyInst: PropTypes.object.isRequired,
   bassGrid: PropTypes.func.isRequired,
-  bassInst: PropTypes.object.isRequired
+  bassInst: PropTypes.object.isRequired,
+  updateGrid: PropTypes.func.isRequired,
+  gridIsUpdated: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
   melodyInst: state.instrumentReducer.melodyInst,
-  bassInst: state.instrumentReducer.bassInst
+  bassInst: state.instrumentReducer.bassInst,
+  gridIsUpdated: state.sectionsGridReducer.gridUpdated
 });
 
-export default connect(mapStateToProps, { melodyGrid, bassGrid })(PianoRoll);
+export default connect(mapStateToProps, { melodyGrid, bassGrid, updateGrid })(PianoRoll);
