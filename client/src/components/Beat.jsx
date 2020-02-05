@@ -3,6 +3,7 @@ import React from 'react';
 import DrumRoll from './DrumRoll';
 import Sampler from './instruments/Sampler';
 import VelocitySliders from './VelocitySliders';
+import Effects from './effects/Effects';
 
 const Beat = () => {
   return (
@@ -13,6 +14,7 @@ const Beat = () => {
         </div>
 
         <Sampler />
+        <Effects section="beat" />
         <DrumRoll />
         <VelocitySliders section="beat" />
       </section>

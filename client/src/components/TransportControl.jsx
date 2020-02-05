@@ -7,8 +7,31 @@ import gridToPlayableGrid from '../utils/gridToPlayableGrid';
 import { MdPlayArrow, MdStop } from 'react-icons/md';
 
 import numberToNote from '../utils/numberToNote';
+import { melodyEffect1, melodyEffect2, beatEffect1, beatEffect2, bassEffect1, bassEffect2, chordEffect1, chordEffect2 } from '../actions/effects';
 
-const TransportControl = ({ melody, melodyInst, melodyVel, beat, beatInst, beatVel, bass, bassInst, bassVel, chords, chordInst, chordVel, gridIsUpdated }) => {
+const TransportControl = ({
+  melody,
+  melodyInst,
+  melodyVel,
+  melodyEffect1,
+  melodyEffect2,
+  beatEffect1,
+  beatEffect2,
+  bassEffect1,
+  bassEffect2,
+  chordEffect1,
+  chordEffect2,
+  beat,
+  beatInst,
+  beatVel,
+  bass,
+  bassInst,
+  bassVel,
+  chords,
+  chordInst,
+  chordVel,
+  gridIsUpdated
+}) => {
   //   const [currentMelody, setCurrentMelody] = useState(null)
 
   let index = 0;
@@ -32,7 +55,7 @@ const TransportControl = ({ melody, melodyInst, melodyVel, beat, beatInst, beatV
     if (isPlaying === 'started') {
       Tone.Transport.start();
     }
-  }, [melodyInst]);
+  }, [melodyInst, melodyEffect1]);
 
   /* stops then starts transport when grid changes are made
      prevents stacking play loop 
@@ -44,7 +67,7 @@ const TransportControl = ({ melody, melodyInst, melodyVel, beat, beatInst, beatV
     if (isPlaying === 'started') {
       play();
     }
-  }, [melody, chords, bass, melodyInst, bassInst, gridIsUpdated]);
+  }, [melody, chords, bass, melodyInst, bassInst, gridIsUpdated, melodyEffect1]);
 
   // start loop
   const play = () => {
@@ -67,20 +90,23 @@ const TransportControl = ({ melody, melodyInst, melodyVel, beat, beatInst, beatV
     //melody section
     if (playableMelody[step].length > 0) {
       let notes = playableMelody[step].map(note => numberToNote(note));
-      melodyInst.triggerAttackRelease(notes[0], '8n', '+0', melodyVel[step]);
+      melodyEffect1
+        ? melodyInst.connect(melodyEffect1, melodyEffect2).triggerAttackRelease(notes[0], '8n', '+0', melodyVel[step])
+        : melodyInst.triggerAttackRelease(notes[0], '8n', '+0', melodyVel[step]);
     }
     if (playableBeat[step].length > 0) {
       let beats = playableBeat[step].map(note => numberToNote(note));
-
-      beatInst.triggerAttack(beats, '+0', beatVel[step]);
+      beatEffect1 ? beatInst.connect(beatEffect1, beatEffect2).triggerAttack(beats, '+0', beatVel[step]) : beatInst.triggerAttack(beats, '+0', beatVel[step]);
     }
     if (playableBass[step].length > 0) {
       let bass = playableBass[step].map(note => numberToNote(note + 24));
-      bassInst.triggerAttackRelease(bass[0], '8n', '+0', bassVel[step]);
+      bassEffect1
+        ? bassInst.connect(bassEffect1, bassEffect2).triggerAttackRelease(bass[0], '8n', '+0', bassVel[step])
+        : bassInst.triggerAttackRelease(bass[0], '8n', '+0', bassVel[step]);
     }
 
     if (chords[step].length > 0) {
-      chordInst.triggerAttackRelease(chords[step], '8n');
+      chordEffect1 ? chordInst.connect(chordEffect1, chordEffect2).triggerAttackRelease(chords[step], '8n') : chordInst.triggerAttackRelease(chords[step], '8n');
     }
     index++;
   };
@@ -113,7 +139,9 @@ TransportControl.protoTypes = {
   beatVel: PropTypes.array.isRequired,
   bassVel: PropTypes.array.isRequired,
   chordVel: PropTypes.array.isRequired,
-  gridIsUpdated: PropTypes.bool.isRequired
+  gridIsUpdated: PropTypes.bool.isRequired,
+  melodyEffect1: PropTypes.object.isRequired,
+  melodyEffect2: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -130,7 +158,15 @@ const mapStateToProps = state => ({
   beatVel: state.velocityReducer.beatVel,
   bassVel: state.velocityReducer.bassVel,
   chordVel: state.velocityReducer.chordVel,
-  gridIsUpdated: state.sectionsGridReducer.gridUpdated
+  gridIsUpdated: state.sectionsGridReducer.gridUpdated,
+  melodyEffect1: state.audioEffectReducer.melodyEffect1,
+  melodyEffect2: state.audioEffectReducer.melodyEffect2,
+  beatEffect1: state.audioEffectReducer.beatEffect1,
+  beatEffect2: state.audioEffectReducer.beatEffect2,
+  bassEffect1: state.audioEffectReducer.bassEffect1,
+  bassEffect2: state.audioEffectReducer.bassEffect2,
+  chordEffect1: state.audioEffectReducer.chordEffect1,
+  chordEffect2: state.audioEffectReducer.chordEffect2
 });
 
 export default connect(mapStateToProps)(TransportControl);

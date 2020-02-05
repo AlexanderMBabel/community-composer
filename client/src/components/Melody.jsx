@@ -5,6 +5,7 @@ import Instrument from './Instrument';
 import VelocitySliders from './VelocitySliders';
 import FrequencyModSynth from './instruments/FrequencyModSynth';
 import Effects from './effects/Effects';
+import Effect from './effects/Effect';
 
 // import PropTypes from 'prop-types';
 
@@ -16,7 +17,7 @@ const Melody = () => {
       </div>
 
       <FrequencyModSynth section="melody" />
-      <Effects />
+      <Effects section="melody" />
       <PianoRoll section="melody" />
       <VelocitySliders section="melody" />
     </div>

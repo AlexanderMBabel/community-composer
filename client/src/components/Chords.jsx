@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import chordProgressionGenerator from '../utils/chordProgressionGenerator';
 
 import PolySynth from './instruments/PolySynth';
+import Effects from './effects/Effects';
 
 const keyOptions = [
   { value: 0, label: 'A' },
@@ -60,6 +61,7 @@ const Chords = ({ chordGrid }) => {
       <section className=" flex flex-wrap items-center justify-center flex-col">
         <div className="font-lato text-3xl w-full theme-bg-yellow text-center my-5  font-bold">Chord Progression</div>
         <PolySynth />
+        <Effects section="chord" />
         <section className="flex flex-wrap w-full items-center justify-center">
           <div className="w-1/6">
             <p>Key</p>

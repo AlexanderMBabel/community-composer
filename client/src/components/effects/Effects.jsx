@@ -1,39 +1,16 @@
 import React from 'react';
-import { FaPlusCircle } from 'react-icons/fa';
+import Effect from './Effect';
 
-const Effects = () => {
+const Effects = ({ section }) => {
   return (
-    <div>
-      <div className="flex w-full items-center justify-center">
-        <div className="border-dotted border-4  flex items-center justify-center" style={{ height: '20vh' }}>
-          <div>
-            <p className="text-xs">Add Effect</p>
-            <FaPlusCircle />
-          </div>
+    <div className="w-full">
+      <p className="text-center">Effects</p>
+      <div className="flex w-full flex-wrap container mx-auto justify-center">
+        <div className="w-1/3 m-2">
+          <Effect placement={1} section={section} />
         </div>
-        <div className="border-dotted border-4 m-5 p-10 flex items-center justify-center" style={{ height: '20vh' }}>
-          <div>
-            <p className="text-xs">Add Effect</p>
-            <FaPlusCircle />
-          </div>
-        </div>
-        <div className="border-dotted border-4  flex items-center justify-center" style={{ height: '20vh' }}>
-          <div>
-            <p className="text-xs">Add Effect</p>
-            <FaPlusCircle />
-          </div>
-        </div>
-        <div className="border-dotted border-4  flex items-center justify-center" style={{ height: '20vh' }}>
-          <div>
-            <p className="text-xs">Add Effect</p>
-            <FaPlusCircle />
-          </div>
-        </div>
-        <div className="border-dotted border-4  flex items-center justify-center" style={{ height: '20vh' }}>
-          <div>
-            <p className="text-xs">Add Effect</p>
-            <FaPlusCircle />
-          </div>
+        <div className="w-1/3 m-2">
+          <Effect placement={2} section={section} />
         </div>
       </div>
     </div>

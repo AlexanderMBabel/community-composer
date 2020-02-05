@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 
 // const synth = new Tone.FMSynth().toMaster();
 
-const PianoRoll = ({ melodyGrid, melodyInst, bassGrid, bassInst, section, updateGrid, gridIsUpdated }) => {
+const PianoRoll = ({ melodyGrid, melodyInst, melodyEffect1, bassGrid, bassInst, section, updateGrid, gridIsUpdated }) => {
   const [noteName, setNoteName] = useState('');
   const [notes, setNotes] = useState(createInitialGrid(24, 24));
 
@@ -25,7 +25,7 @@ const PianoRoll = ({ melodyGrid, melodyInst, bassGrid, bassInst, section, update
     let tempNotes = notes;
 
     if (section === 'melody') {
-      melodyInst.triggerAttackRelease(numberToNote(note), 0.5);
+      melodyEffect1 ? melodyInst.connect(melodyEffect1, null).triggerAttackRelease(numberToNote(note), 0.5) : melodyInst.triggerAttackRelease(numberToNote(note), 0.5);
       tempNotes[note][step] = !tempNotes[note][step];
 
       setNotes(tempNotes);
@@ -87,7 +87,8 @@ PianoRoll.protoTypes = {
 const mapStateToProps = state => ({
   melodyInst: state.instrumentReducer.melodyInst,
   bassInst: state.instrumentReducer.bassInst,
-  gridIsUpdated: state.sectionsGridReducer.gridUpdated
+  gridIsUpdated: state.sectionsGridReducer.gridUpdated,
+  melodyEffect1: state.audioEffectReducer.melodyEffect1
 });
 
 export default connect(mapStateToProps, { melodyGrid, bassGrid, updateGrid })(PianoRoll);
