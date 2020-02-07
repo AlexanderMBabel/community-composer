@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 import createInitialGrid from '../../utils/createInitialGrid';
@@ -11,11 +11,15 @@ import PropTypes from 'prop-types';
 
 // const synth = new Tone.FMSynth().toMaster();
 
-const PianoRoll = ({ melodyGrid, melodyInst, melodyEffect1, bassGrid, bassInst, section, updateGrid, gridIsUpdated }) => {
+const PianoRoll = ({ steps, melodyGrid, melodyInst, melodyEffect1, bassGrid, bassInst, section, updateGrid, gridIsUpdated }) => {
   const [noteName, setNoteName] = useState('');
-  const [notes, setNotes] = useState(createInitialGrid(24, 24));
+  const [notes, setNotes] = useState(createInitialGrid(steps, 24));
 
   const [showBlockValue, setShowBlockValue] = useState(false);
+
+  useEffect(() => {
+    setNotes(createInitialGrid(Number(steps), 24));
+  }, [steps]);
 
   const showNote = (number, step) => {
     setNoteName(numberToNote(number));
@@ -75,20 +79,22 @@ const PianoRoll = ({ melodyGrid, melodyInst, melodyEffect1, bassGrid, bassInst, 
   );
 };
 
-PianoRoll.protoTypes = {
+PianoRoll.propTypes = {
   melodyGrid: PropTypes.func,
   melodyInst: PropTypes.object.isRequired,
   bassGrid: PropTypes.func.isRequired,
   bassInst: PropTypes.object.isRequired,
   updateGrid: PropTypes.func.isRequired,
-  gridIsUpdated: PropTypes.bool.isRequired
+  gridIsUpdated: PropTypes.bool.isRequired,
+  steps: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
   melodyInst: state.instrumentReducer.melodyInst,
   bassInst: state.instrumentReducer.bassInst,
   gridIsUpdated: state.sectionsGridReducer.gridUpdated,
-  melodyEffect1: state.audioEffectReducer.melodyEffect1
+  melodyEffect1: state.audioEffectReducer.melodyEffect1,
+  steps: state.universalReducer.steps
 });
 
 export default connect(mapStateToProps, { melodyGrid, bassGrid, updateGrid })(PianoRoll);

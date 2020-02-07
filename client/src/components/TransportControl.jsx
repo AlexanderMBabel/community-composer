@@ -40,7 +40,7 @@ const TransportControl = ({
 
   let index = 0;
   // **TODO** get number of steps from redux
-  const NumberOfSteps = countSteps;
+
   let playableMelody = gridToPlayableGrid(melody);
   let playableBeat = gridToPlayableGrid(beat);
   let playableBass = gridToPlayableGrid(bass);
@@ -110,7 +110,7 @@ const TransportControl = ({
   // reapeat function used in scheduleRepeat
   // loops number of steps and plays a
   const repeat = time => {
-    let step = index % NumberOfSteps;
+    let step = index % countSteps;
     //melody section
     if (playableMelody[step].length > 0) {
       let notes = playableMelody[step].map(note => numberToNote(note));
@@ -146,6 +146,11 @@ const TransportControl = ({
   const changeSwing = e => {
     setSwing(e.target.value);
   };
+
+  // Steps change handler
+  const changeSteps = e => {
+    numberOfSteps(e.target.value);
+  };
   return (
     <div className="theme-bg-gray  flex items-center justify-center relative" style={{ height: '10vh' }}>
       <div className="absolute top-0 left-0">
@@ -166,11 +171,15 @@ const TransportControl = ({
         <p className="text-gray-200">Swing</p>
         <input className="w-1/4" type="number" value={swing} min="0" step="0.01" onChange={changeSwing} />
       </div>
+      <div>
+        <p className="text-gray-200">Steps</p>
+        <input className="w-1/4" type="number" value={countSteps} min="1" onChange={changeSteps} />
+      </div>
     </div>
   );
 };
 
-TransportControl.protoTypes = {
+TransportControl.propTypes = {
   melody: PropTypes.array.isRequired,
   beat: PropTypes.array.isRequired,
   bass: PropTypes.array.isRequired,
@@ -185,7 +194,8 @@ TransportControl.protoTypes = {
   chordVel: PropTypes.array.isRequired,
   gridIsUpdated: PropTypes.bool.isRequired,
   melodyEffect1: PropTypes.object.isRequired,
-  melodyEffect2: PropTypes.object.isRequired
+  melodyEffect2: PropTypes.object.isRequired,
+  numberOfSteps: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

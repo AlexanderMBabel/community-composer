@@ -44,7 +44,8 @@ const progressionOptions = [
 
 const styleOptions = [
   { value: [0, 'space', 0, 0, 1, 'space', 1, 'space', 2, 2, 'space', 1], label: 'basic' },
-  { value: [0, 'space', 'space', 1, 'space', 'space', 2, 'space', 'space', 1, 'space', 2], label: 'basic2' },
+  { value: [0, 'space', 'space', 1, 'space', 'space', 2, 'space', 'space', 1, 'space', 2], label: 'basic 2' },
+  { value: [0, 'space', 'space', 'space', 1, 'space', 'space', 'space', 2, 'space', 2, 'space'], label: 'basic 3' },
   { value: ['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'], label: 'stop' }
 ];
 const Chords = ({ chordGrid }) => {
