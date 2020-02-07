@@ -23,7 +23,7 @@ const chordNumberToNote = note => {
     case 10:
       return 'G3';
     case 11:
-      return 'G#2';
+      return 'G#1';
     default:
       return;
   }

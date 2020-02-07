@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Distortion as DistortionTone } from 'tone';
+import { Reverb as ReverbTone } from 'tone';
 import { Knob } from 'react-rotary-knob';
 import { s10, s8 } from 'react-rotary-knob-skin-pack';
-import Select from 'react-select';
-
-const oversampleOptions = [
-  { value: 'none', label: 'none' },
-  { value: '2x', label: '2x' },
-  { value: '4x', label: '4x' }
-];
 
 const Reverb = ({ setAudioEffect }) => {
   const [decay, setDecay] = useState(1.5);
@@ -19,7 +12,7 @@ const Reverb = ({ setAudioEffect }) => {
     preDelay: preDelay
   };
 
-  let distortionEffect = new DistortionTone({ settings }).toMaster();
+  let distortionEffect = new ReverbTone({ settings }).toMaster();
   useEffect(() => {
     setAudioEffect(distortionEffect);
     // eslint-disable-next-line react-hooks/exhaustive-deps

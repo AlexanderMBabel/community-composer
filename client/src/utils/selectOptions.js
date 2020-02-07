@@ -22,9 +22,10 @@ export const effectOptions = [
 ];
 
 export const instrumentOptions = [
+  { value: 'Simple', label: 'Simple Synth' },
   { value: 'FMSynth', label: 'FM Synth' },
   { value: 'PluckSynth', label: 'Pluck Synth' },
-  { value: 'Simple', label: 'Simple Synth' },
+
   { value: 'Masivish', label: 'Masivish' },
   { value: 'Twin', label: 'Twin' }
 ];

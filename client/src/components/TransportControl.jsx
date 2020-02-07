@@ -36,6 +36,7 @@ const TransportControl = ({
   numberOfSteps
 }) => {
   const [bpm, setBpm] = useState(120);
+  const [swing, setSwing] = useState(0);
 
   let index = 0;
   // **TODO** get number of steps from redux
@@ -44,11 +45,14 @@ const TransportControl = ({
   let playableBeat = gridToPlayableGrid(beat);
   let playableBass = gridToPlayableGrid(bass);
 
-  // console.log('melody', playableMelody, 'beats', playableBeat);
-  // initialize Tones tranport to repeat
+  // initialize Tone Transport instance with options
+
+  // initialize Tone scheduleRepeat
   Tone.Transport.scheduleRepeat(time => {
     repeat(time);
   }, '8n');
+
+  Tone.Transport.bpm.value = bpm;
 
   // console.log('bass', bass, 'melody', melody, 'chord', chords);
   // stops then starts tranport when sound changes are made
@@ -58,7 +62,7 @@ const TransportControl = ({
     if (isPlaying === 'started') {
       Tone.Transport.start();
     }
-  }, [melodyInst, melodyEffect1]);
+  }, []);
 
   /* stops then starts transport when grid changes are made
      prevents stacking play loop 
@@ -70,7 +74,24 @@ const TransportControl = ({
     if (isPlaying === 'started') {
       play();
     }
-  }, [melody, chords, bass, melodyInst, bassInst, gridIsUpdated, melodyEffect1]);
+  }, [
+    swing,
+    melody,
+    chords,
+    bass,
+    melodyInst,
+    bassInst,
+    gridIsUpdated,
+    melodyEffect1,
+    melodyEffect2,
+    bassEffect1,
+    bassEffect2,
+    beatEffect1,
+    beatEffect2,
+    chordEffect1,
+    chordEffect2,
+    bpm
+  ]);
 
   // start loop
   const play = () => {
@@ -116,7 +137,14 @@ const TransportControl = ({
 
   // Bpm Change handler
   const changeBpm = e => {
-    setBpm(e.target.value);
+    if (e.target.value > 0 && e.target.value < 300) {
+      setBpm(e.target.value);
+    }
+  };
+
+  //Swing Change Handler
+  const changeSwing = e => {
+    setSwing(e.target.value);
   };
   return (
     <div className="theme-bg-gray  flex items-center justify-center relative" style={{ height: '10vh' }}>
@@ -131,7 +159,12 @@ const TransportControl = ({
         <MdStop />
       </div>
       <div>
-        <input type="number" value={bpm} onChange={changeBpm} />
+        <p className="text-gray-200">BPM</p>
+        <input className="w-1/4" type="number" value={bpm} onChange={changeBpm} />
+      </div>
+      <div>
+        <p className="text-gray-200">Swing</p>
+        <input className="w-1/4" type="number" value={swing} min="0" step="0.01" onChange={changeSwing} />
       </div>
     </div>
   );

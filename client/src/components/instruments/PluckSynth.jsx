@@ -70,7 +70,7 @@ const PluckSynth = ({ section, melodyInstrument, bassInstrument }) => {
             value={resonance}
             skin={s11}
             min={0}
-            max={10}
+            max={1}
           />
           <p className="text-xs">{resonance.toFixed(2)}</p>
           <p>resonance</p>

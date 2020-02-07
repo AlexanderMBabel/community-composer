@@ -20,6 +20,7 @@ const ChooseInstrument = ({ section }) => {
   };
   return (
     <div>
+      <div>Choose Your Sound</div>
       <Select
         options={instrumentOptions}
         defaultValue={instrumentOptions[0]}

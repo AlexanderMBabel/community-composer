@@ -36,6 +36,7 @@ const Chorus = ({ setAudioEffect }) => {
             setFrequency(val);
           }}
           skin={s10}
+          value={frequency}
           min={0}
           max={10}
         />
@@ -49,6 +50,7 @@ const Chorus = ({ setAudioEffect }) => {
           onChange={val => {
             setDelayTime(val);
           }}
+          value={delayTime}
           skin={s10}
           min={0}
           max={10}
@@ -63,6 +65,7 @@ const Chorus = ({ setAudioEffect }) => {
           onChange={val => {
             setDepth(val);
           }}
+          value={depth}
           skin={s10}
           min={0}
           max={4}
@@ -77,9 +80,10 @@ const Chorus = ({ setAudioEffect }) => {
           onChange={val => {
             setSpread(val);
           }}
+          value={spread}
           skin={s10}
           min={0}
-          max={1}
+          max={360}
         />
         <p className="text-xs">{spread.toFixed(2)}</p>
         <p>Spread</p>
