@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import createInitialGrid from '../utils/createInitialGrid';
+import updateGridSteps from '../utils/updateGridSteps';
 
 import { connect } from 'react-redux';
 
 import { beatGrid, updateGrid } from '../actions/grids';
-import { numberOfSteps } from '../actions/numberOfSteps';
+
 import numberToNote from '../utils/numberToNote';
 
 import PropTypes from 'prop-types';
 
-const DrumRoll = ({ beatInst, beatGrid, updateGrid, gridUpdated, steps, numberOfSteps }) => {
-  const [drums, setDrums] = useState(createInitialGrid(24, 9));
+const DrumRoll = ({ beatInst, beatGrid, updateGrid, gridUpdated, steps }) => {
+  const [drums, setDrums] = useState(createInitialGrid(steps, 9));
   const [showBlock, setShowBlock] = useState(false);
+
+  useEffect(() => {
+    const tempGrid = createInitialGrid(steps, 9);
+    const newGrid = updateGridSteps(tempGrid, drums);
+    setDrums(newGrid);
+    beatGrid(drums);
+    updateGrid(!gridUpdated);
+  }, [steps]);
 
   const stepClick = (drum, step) => {
     let tempDrums = drums;
@@ -61,8 +70,7 @@ DrumRoll.propTypes = {
   beatInst: PropTypes.object.isRequired,
   updateGrid: PropTypes.func.isRequired,
   gridUpdated: PropTypes.bool.isRequired,
-  steps: PropTypes.number.isRequired,
-  numberOfSteps: PropTypes.func.isRequired
+  steps: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -71,4 +79,4 @@ const mapStateToProps = state => ({
   steps: state.universalReducer.steps
 });
 
-export default connect(mapStateToProps, { beatGrid, updateGrid, numberOfSteps })(DrumRoll);
+export default connect(mapStateToProps, { beatGrid, updateGrid })(DrumRoll);

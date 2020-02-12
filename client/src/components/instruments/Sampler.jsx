@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Tone from 'tone';
 // import {} from '../../sounds/drums/KICKS/'
 import Select from 'react-select';
@@ -7,6 +7,11 @@ import { beatInstrument } from '../../actions/instruments';
 import PropTypes from 'prop-types';
 import { Knob } from 'react-rotary-knob';
 import { s7 } from 'react-rotary-knob-skin-pack';
+
+import { customStyles } from '../../styles/react-select-custom';
+import DropdownIndicator from '../../react-select-customs/DropdownIndicator';
+import { drumSets } from '../../utils/selectOptions';
+import { FaDrumSteelpan } from 'react-icons/fa';
 
 import kick from '../../beats/kickBroke.wav';
 import snareDrum from '../../beats/snareDrip.wav';
@@ -19,7 +24,7 @@ import percB from '../../beats/percSeek.wav';
 // import kick from '../../beats/kickBroke.wav'
 
 const Sampler = ({ beatInstrument }) => {
-  // let buffer = new Tone.Buffer('../../sounds/drums/KICKS/broke.wav')
+  const [volume, setVolume] = useState(0);
   // create sampler
   let samplerInst = new Tone.Sampler({
     B4: kick,
@@ -32,25 +37,24 @@ const Sampler = ({ beatInstrument }) => {
     E4: percB
   }).toMaster();
 
+  useEffect(() => {
+    samplerInst.volume.value = volume;
+  }, [volume]);
+
   beatInstrument(samplerInst);
 
-  // Tone.Buffer.on('load', () => {
-  //   console.log('buffer loaded');
-  // });
-  const test = () => {
-    samplerInst.triggerAttackRelease('C3', '8n', 0);
-  };
-
-  const snare = () => {
-    samplerInst.triggerAttackRelease('C#3', '0.3', 0);
-  };
   return (
     <div>
       <div className="border shadow-md flex flex-row">
-        <div className="border flex flex-col">
-          <p>Kick</p>
-          <div>Attack</div>
-          <div>Release</div>
+        <div className="border p-6 shadow-inner flex flex-col">
+          <div>
+            <p>Sound Preset</p>
+            <Select placeholder={<FaDrumSteelpan />} options={drumSets} styles={customStyles} />
+          </div>
+          <div className="">
+            <Knob skin={s7} onChange={val => setVolume(val)} min={-40} max={20} unlockDistance={20} step={1} value={volume} />
+            <p>Volume</p>
+          </div>
         </div>
       </div>
     </div>

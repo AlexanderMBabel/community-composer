@@ -48,13 +48,13 @@ const styleOptions = [
   { value: [0, 'space', 'space', 'space', 1, 'space', 'space', 'space', 2, 'space', 2, 'space'], label: 'basic 3' },
   { value: ['space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space', 'space'], label: 'stop' }
 ];
-const Chords = ({ chordGrid }) => {
+const Chords = ({ chordGrid, steps }) => {
   const [key, setKey] = useState(0);
   const [scale, setScale] = useState([2, 2, 1, 2, 2, 2]);
   const [progression, setProgression] = useState([0, 3, 4]);
   const [style, setStyle] = useState([0, 'space', 0, 0, 1, 'space', 1, 'space', 2, 2, 'space', 1]);
 
-  let chordProgression = chordProgressionGenerator(scale, key, progression, style);
+  let chordProgression = chordProgressionGenerator(scale, key, progression, style, steps);
   chordGrid(chordProgression);
 
   return (
@@ -86,8 +86,13 @@ const Chords = ({ chordGrid }) => {
   );
 };
 
-Chords.prototype = {
-  chordGrid: PropTypes.func.isRequired
+Chords.propTypes = {
+  chordGrid: PropTypes.func.isRequired,
+  steps: PropTypes.number.isRequired
 };
 
-export default connect(null, { chordGrid })(Chords);
+const mapStateToProps = state => ({
+  steps: state.universalReducer.steps
+});
+
+export default connect(mapStateToProps, { chordGrid })(Chords);

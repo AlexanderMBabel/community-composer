@@ -13,12 +13,35 @@ import PropTypes from 'prop-types';
 
 const PianoRoll = ({ steps, melodyGrid, melodyInst, melodyEffect1, bassGrid, bassInst, section, updateGrid, gridIsUpdated }) => {
   const [noteName, setNoteName] = useState('');
-  const [notes, setNotes] = useState(createInitialGrid(steps, 24));
+  const [notes, setNotes] = useState(createInitialGrid(Number(steps), 24));
 
   const [showBlockValue, setShowBlockValue] = useState(false);
 
   useEffect(() => {
-    setNotes(createInitialGrid(Number(steps), 24));
+    // create temp grid with if updated amount of steps
+
+    const tempNotes = createInitialGrid(Number(steps), 24);
+
+    // loop through tempnote notes
+    for (let i = 0; i < tempNotes.length; i++) {
+      // loop through steps for each note
+      for (let y = 0; y < tempNotes[i].length; y++) {
+        // note existed add to grid
+        if (typeof notes[i][y] !== 'undefined') {
+          tempNotes[i][y] = notes[i][y];
+        }
+      }
+    }
+
+    // set notes state
+    setNotes(tempNotes);
+    //update grid depending on section
+    if (section === 'melody') {
+      melodyGrid(notes);
+    }
+    if (section === 'bass') {
+      bassGrid(notes);
+    }
   }, [steps]);
 
   const showNote = (number, step) => {

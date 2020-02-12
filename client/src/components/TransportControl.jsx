@@ -5,6 +5,8 @@ import * as Tone from 'tone';
 import gridToPlayableGrid from '../utils/gridToPlayableGrid';
 
 import { MdPlayArrow, MdStop } from 'react-icons/md';
+import { GiWaveCrest } from 'react-icons/gi';
+import { TiWavesOutline } from 'react-icons/ti';
 import { numberOfSteps } from '../actions/numberOfSteps';
 
 import numberToNote from '../utils/numberToNote';
@@ -41,9 +43,11 @@ const TransportControl = ({
   let index = 0;
   // **TODO** get number of steps from redux
 
-  let playableMelody = gridToPlayableGrid(melody);
-  let playableBeat = gridToPlayableGrid(beat);
-  let playableBass = gridToPlayableGrid(bass);
+  // convert grid to palyable version
+
+  let playableMelody = gridToPlayableGrid(melody, countSteps);
+  let playableBeat = gridToPlayableGrid(beat, countSteps);
+  let playableBass = gridToPlayableGrid(bass, countSteps);
 
   // initialize Tone Transport instance with options
 
@@ -149,14 +153,10 @@ const TransportControl = ({
 
   // Steps change handler
   const changeSteps = e => {
-    numberOfSteps(e.target.value);
+    numberOfSteps(Number(e.target.value));
   };
   return (
-    <div className="theme-bg-gray  flex items-center justify-center relative" style={{ height: '10vh' }}>
-      <div className="absolute top-0 left-0">
-        <div className="text-gray-100 font-bangers text-4xl mt-3 ml-5">CC</div>
-        <div className="text-gray-100">Community Composer</div>
-      </div>
+    <div className="theme-bg-gray  flex items-center justify-center relative" style={{ height: '5vh' }}>
       <div onClick={play} className="p-3 theme-bg-light-blue m-2 border rounded-r-sm hover:bg-blue-600 active:bg-green-200">
         <MdPlayArrow className=" " />
       </div>

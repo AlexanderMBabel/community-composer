@@ -5,7 +5,7 @@ import chordNumberToNote from './chordNumberToNote';
 export const generateScale = scaleSteps => {
   let scale = [0];
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 7; i++) {
     scale.push(scaleSteps[i] + scale[i]);
   }
   return scale;
@@ -42,15 +42,32 @@ export const createPattern = (chords, pattern) => {
       patternGrid.push(chords[step]);
     }
   });
-  return [...patternGrid, ...patternGrid];
+  return [...patternGrid];
 };
 
-const chordProgressionGenerator = (scaleType, key, progression, pattern) => {
+const scalePatternToSteps = (chordPattern, steps) => {
+  const wholePatternTimes = Math.floor(steps / 12);
+  const fractionPatternTimes = steps % 12;
+  let pattern = [];
+  let fraction = [];
+  for (let i = 0; i < wholePatternTimes; i++) {
+    pattern = [...pattern, ...chordPattern];
+  }
+
+  for (let i = 0; i < fractionPatternTimes; i++) {
+    fraction.push(chordPattern[i]);
+  }
+  pattern = [...pattern, ...fraction];
+  return pattern;
+};
+
+const chordProgressionGenerator = (scaleType, key, progression, pattern, steps) => {
   let scale = generateScale(scaleType);
   let transposedScale = transposeScale(scale, key);
   let chordProgression = generateProgression(transposedScale, progression);
   let chordPattern = createPattern(chordProgression, pattern);
-  return chordPattern;
+  let scalePattern = scalePatternToSteps(chordPattern, steps);
+  return scalePattern;
 };
 
 export const changeStlyeOnProgressionLength = (progression, style) => {

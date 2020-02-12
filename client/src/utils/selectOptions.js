@@ -29,3 +29,9 @@ export const instrumentOptions = [
   { value: 'Masivish', label: 'Masivish' },
   { value: 'Twin', label: 'Twin' }
 ];
+
+export const drumSets = [
+  { value: 'ElectroBlip', label: 'Electro Blib' },
+  { value: 'Basic', label: 'Basic' },
+  { value: 'Abnormal', label: 'abnormal' }
+];
