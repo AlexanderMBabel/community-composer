@@ -35,3 +35,16 @@ export const drumSets = [
   { value: 'Basic', label: 'Basic' },
   { value: 'Abnormal', label: 'abnormal' }
 ];
+
+export const midiInputOptions = [
+  { value: 'Keyboard', label: 'Computer Keyboard' },
+  { value: 'Midi Controller', label: 'Midi Controller' }
+];
+
+export const outputOptions = [
+  { value: 'Master', label: 'Master' },
+  { value: 'bus1', label: 'bus1' },
+  { value: 'bus2', label: 'bus2' },
+  { value: 'bus3', label: 'bus3' },
+  { value: 'bus4', label: 'bus4' }
+];

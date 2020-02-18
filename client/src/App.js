@@ -7,6 +7,7 @@ import Bass from './components/Bass';
 import Chords from './components/Chords';
 import SidePanel from './components/SidePanel/SidePanel';
 import MainSequence from './components/MainSequence/MainSequence';
+import EditPanel from './components/EditPanel/EditPanel';
 function App() {
   return (
     <div className=" bg-gray-900 font-lato">
@@ -14,6 +15,7 @@ function App() {
       <div className="flex flex-wrap">
         <SidePanel />
         <MainSequence />
+        <EditPanel />
       </div>
       <Melody />
       <Beat />

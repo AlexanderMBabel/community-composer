@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PianoRoll from './PianoRoll/PianoRoll';
 import ChooseInstrument from './ChooseInstrument';
-import Instrument from './Instrument';
+
 import VelocitySliders from './VelocitySliders';
-import FrequencyModSynth from './instruments/FrequencyModSynth';
+
 import Effects from './effects/Effects';
-import Effect from './effects/Effect';
 
 // import PropTypes from 'prop-types';
 

@@ -1,7 +1,9 @@
-import { NUMBER_OF_STEPS } from '../actions/types';
+import { NUMBER_OF_STEPS, SELECTED_CLIP, SELECTED_TRACK } from '../actions/types';
 
 const initialState = {
-  steps: 24
+  steps: 24,
+  selectedTrack: { type: null, name: null },
+  selectedClip: null
 };
 
 export default (state = initialState, action) => {
@@ -9,6 +11,10 @@ export default (state = initialState, action) => {
   switch (type) {
     case NUMBER_OF_STEPS:
       return { ...state, steps: payload };
+    case SELECTED_TRACK:
+      return { ...state, selectedTrack: payload };
+    case SELECTED_CLIP:
+      return { ...state, selectedClip: payload };
     default:
       return state;
   }

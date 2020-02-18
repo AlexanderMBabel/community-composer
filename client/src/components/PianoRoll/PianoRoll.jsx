@@ -9,9 +9,35 @@ import { melodyGrid, bassGrid, updateGrid } from '../../actions/grids';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-// const synth = new Tone.FMSynth().toMaster();
-
 const PianoRoll = ({ steps, melodyGrid, melodyInst, melodyEffect1, bassGrid, bassInst, section, updateGrid, gridIsUpdated }) => {
+  // create array of octave
+  const numberOfNotes = new Array(12).fill('');
+
+  // fill octave array with key color denoted by 'b' or 'w'
+
+  const keyColor = notesArray => {
+    let coloredArray = notesArray.map((notes, iter) => {
+      if (iter < 7) {
+        if (iter % 2 === 0) {
+          return 'w';
+        } else {
+          return 'b';
+        }
+      }
+      if (iter > 6) {
+        if (iter % 2 === 0) {
+          return 'b';
+        } else {
+          return 'w';
+        }
+      }
+    });
+    return coloredArray;
+  };
+
+  let coloredKeyArray = keyColor(numberOfNotes);
+  coloredKeyArray = [...coloredKeyArray, ...coloredKeyArray];
+
   const [noteName, setNoteName] = useState('');
   const [notes, setNotes] = useState(createInitialGrid(Number(steps), 24));
 
@@ -74,26 +100,33 @@ const PianoRoll = ({ steps, melodyGrid, melodyInst, melodyEffect1, bassGrid, bas
   return (
     <div>
       <Scrollbars style={{ width: '900px', height: '300px' }}>
-        <section id="grid" className="mx-auto container mt-5">
-          {/* <div className=" flex flex-row">
-            {notes[0].map((steps, stepNumber) => (
-              <div style={{ margin: '15px' }}>{stepNumber + 1}</div>
+        <section id="grid" className="mx-auto container mt-5 flex">
+          <div>
+            {coloredKeyArray.map(color => {
+              if (color === 'w') {
+                return <div className="bg-white h-5 w-5"></div>;
+              }
+              if (color === 'b') {
+                return <div className="bg-black h-5 w-5"></div>;
+              }
+            })}
+          </div>
+          <div>
+            {notes.map((note, noteNumber) => (
+              <div key={noteNumber} className="flex">
+                {note.map((step, stepNumber) => (
+                  <div
+                    key={stepNumber}
+                    className={`h-5 w-10 border border-gray-200 bg-gray-200 px-4 hover:bg-orange-200 ${
+                      notes[noteNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'
+                    } ${(stepNumber + 1) % 4 === 0 && 'border-r-4 '}`}
+                    onMouseOver={() => showNote(noteNumber, stepNumber)}
+                    onClick={() => stepClick(noteNumber, stepNumber, step)}
+                  ></div>
+                ))}
+              </div>
             ))}
-          </div> */}
-          {notes.map((note, noteNumber) => (
-            <div key={noteNumber} className="flex">
-              {note.map((step, stepNumber) => (
-                <div
-                  key={stepNumber}
-                  className={`h-5 w-10 border border-gray-200 bg-gray-200 px-4 hover:bg-orange-200 ${
-                    notes[noteNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'
-                  } ${(stepNumber + 1) % 4 === 0 && 'border-r-4 '}`}
-                  onMouseOver={() => showNote(noteNumber, stepNumber)}
-                  onClick={() => stepClick(noteNumber, stepNumber, step)}
-                ></div>
-              ))}
-            </div>
-          ))}
+          </div>
         </section>
       </Scrollbars>
       <div>{noteName}</div>

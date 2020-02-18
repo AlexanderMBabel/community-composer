@@ -157,10 +157,10 @@ const TransportControl = ({
   };
   return (
     <div className="theme-bg-gray  flex items-center justify-center relative" style={{ height: '5vh' }}>
-      <div onClick={play} className="p-3 theme-bg-light-blue m-2 border rounded-r-sm hover:bg-blue-600 active:bg-green-200">
+      <div onClick={play} className="p-2 theme-bg-light-blue m-2 border rounded-r-sm hover:bg-blue-600 active:bg-green-200">
         <MdPlayArrow className=" " />
       </div>
-      <div onClick={stop} className="p-3 theme-bg-light-blue border m-2 rounded-sm hover:bg-blue-600 active:bg-red-200">
+      <div onClick={stop} className="p-2 theme-bg-light-blue border m-2 rounded-sm hover:bg-blue-600 active:bg-red-200">
         <MdStop />
       </div>
       <div>
