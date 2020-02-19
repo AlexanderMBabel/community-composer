@@ -2,8 +2,9 @@ import { NUMBER_OF_STEPS, SELECTED_CLIP, SELECTED_TRACK } from '../actions/types
 
 const initialState = {
   steps: 24,
-  selectedTrack: { type: null, name: null },
-  selectedClip: null
+  selectedTrack: { type: null, name: null, numberofSteps: 0 },
+  selectedClip: null,
+  updated: false
 };
 
 export default (state = initialState, action) => {
@@ -14,7 +15,7 @@ export default (state = initialState, action) => {
     case SELECTED_TRACK:
       return { ...state, selectedTrack: payload };
     case SELECTED_CLIP:
-      return { ...state, selectedClip: payload };
+      return { ...state, selectedClip: payload, updated: !state.updated };
     default:
       return state;
   }

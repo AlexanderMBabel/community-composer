@@ -11,6 +11,24 @@
   @apply bg-blue-100;
 }
 
+.btn {
+  @apply p-2 rounded shadow-md h-10 bg-gray-100 m-2 flex items-center justify-center;
+  transition: all 0.2s ease-in;
+}
+.btn:hover {
+  @apply bg-blue-300;
+}
+
+.color-blob {
+  @apply rounded-full shadow-inner;
+}
+.color-blob:hover {
+  filter: brightness(120%);
+}
+.color-blob:active {
+  filter: brightness(75%);
+}
+
 @tailwind utilities;
 
 /* fonts */
