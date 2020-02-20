@@ -1,4 +1,4 @@
-import { Menu, Item, Separator } from 'react-contexify';
+import { Menu, Item } from 'react-contexify';
 
 import React from 'react';
 

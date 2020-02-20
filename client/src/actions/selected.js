@@ -1,4 +1,4 @@
-import { SELECTED_TRACK, SELECTED_CLIP } from './types';
+import { SELECTED_TRACK, SELECTED_CLIP, SELECTED_MENU_ITEM } from './types';
 
 export const selectedTrack = (name, type, numberOfClips) => dispatch => {
   dispatch({
@@ -11,5 +11,12 @@ export const selectedClip = clip => dispatch => {
   dispatch({
     type: SELECTED_CLIP,
     payload: clip
+  });
+};
+
+export const selectedMenuItem = item => dispatch => {
+  dispatch({
+    type: SELECTED_MENU_ITEM,
+    payload: item
   });
 };

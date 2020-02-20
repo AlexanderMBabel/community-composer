@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 // icons
 import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io';

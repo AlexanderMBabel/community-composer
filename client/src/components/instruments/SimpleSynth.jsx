@@ -8,7 +8,6 @@ import Select from 'react-select';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { melodyInstrument, bassInstrument } from '../../actions/instruments';
 
 const SimpleSynth = ({ section, melodyInstrument, bassInstrument }) => {
   const [osc, setOsc] = useState('triangle');
@@ -37,14 +36,7 @@ const SimpleSynth = ({ section, melodyInstrument, bassInstrument }) => {
   simple.volume.value = volume;
   simple.detune.value = detune;
 
-  useEffect(() => {
-    if (section === 'melody') {
-      melodyInstrument(simple);
-    }
-    if (section === 'bass') {
-      bassInstrument(simple);
-    }
-  }, [osc, envAttack, envDecay, envSustain, envRelease, volume]);
+  useEffect(() => {}, [osc, envAttack, envDecay, envSustain, envRelease, volume]);
   return (
     <div className="theme-bg-maroon">
       <div className="flex flex-col items-center rounded shadow-inner relative   border-4">
@@ -158,9 +150,6 @@ const SimpleSynth = ({ section, melodyInstrument, bassInstrument }) => {
   );
 };
 
-SimpleSynth.propTypes = {
-  melodyInstrument: PropTypes.func.isRequired,
-  bassInstrument: PropTypes.func.isRequired
-};
+SimpleSynth.propTypes = {};
 
-export default connect(null, { melodyInstrument, bassInstrument })(SimpleSynth);
+export default connect(null, {})(SimpleSynth);

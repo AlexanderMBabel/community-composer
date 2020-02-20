@@ -11,6 +11,7 @@ import AddTrack from './AddTrack';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+ReactModal.setAppElement('#sequence');
 const dummyTracks = [
   { name: 'Melody', type: 'Midi', instrument: 'FMSynth', effects: ['Distortion', 'Reverb'], color: 'bg-red-300', output: 'Master', input: 'Keyboard' },
   { name: 'Drums', type: 'Midi', instrument: 'DrumMachine', effects: ['Distortion', 'Reverb'], color: 'bg-pink-300', output: 'Master', input: 'Keyboard' },
@@ -28,7 +29,7 @@ const MainSequence = ({ tracks }) => {
     setContext(true);
   };
   return (
-    <div className="w-4/5 relative">
+    <div id="sequence" className="w-4/5 relative">
       <MenuProvider id="trackMenu">
         <div className="" style={{ height: '55vh' }}>
           <section className="rounded border-2 border-gray-100 bg-gray-300 mx-2 h-full">

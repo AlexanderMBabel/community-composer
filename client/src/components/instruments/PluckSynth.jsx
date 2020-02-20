@@ -3,7 +3,7 @@ import { Knob } from 'react-rotary-knob';
 import { s11 } from 'react-rotary-knob-skin-pack';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { melodyInstrument, bassInstrument } from '../../actions/instruments';
+import { addInstrumentAction } from '../../actions/instruments';
 import { PluckSynth as PluckSynthTone } from 'tone';
 const PluckSynth = ({ section, melodyInstrument, bassInstrument }) => {
   const [attackNoise, setAttackNoise] = useState(1);
@@ -18,14 +18,7 @@ const PluckSynth = ({ section, melodyInstrument, bassInstrument }) => {
 
   let pluckSynth = new PluckSynthTone(soundSettings).toMaster();
   pluckSynth.volume.value = volume;
-  useEffect(() => {
-    if (section === 'melody') {
-      melodyInstrument(pluckSynth);
-    }
-    if (section === 'bass') {
-      bassInstrument(pluckSynth);
-    }
-  }, [pluckSynth, bassInstrument, melodyInstrument, section, soundSettings, volume]);
+  useEffect(() => {}, [pluckSynth, soundSettings, volume]);
   return (
     <div className="theme-bg-maroon border-4 shadow-inner">
       <div>
@@ -94,9 +87,6 @@ const PluckSynth = ({ section, melodyInstrument, bassInstrument }) => {
   );
 };
 
-PluckSynth.propTypes = {
-  melodyInstrument: PropTypes.func.isRequired,
-  bassInstrument: PropTypes.func.isRequired
-};
+PluckSynth.propTypes = {};
 
-export default connect(null, { melodyInstrument, bassInstrument })(PluckSynth);
+export default connect(null, {})(PluckSynth);

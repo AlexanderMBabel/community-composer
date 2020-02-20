@@ -5,12 +5,12 @@ import { midiInputOptions, outputOptions } from '../../utils/selectOptions';
 import { ioSelect } from '../../styles/react-select-custom';
 import Volume from '../Volume/Volume';
 import { connect } from 'react-redux';
-import { selectedTrack } from '../../actions/selected';
-const TrackInfo = ({ trackInfo, selectedTrack, position }) => {
-  const { name, type, instrument, effects, color, output, input, clips, numberOfClips } = trackInfo;
+
+const TrackInfo = ({ trackInfo, position }) => {
+  const { name, color, output, input } = trackInfo;
 
   return (
-    <div id="infobar" onClick={() => selectedTrack(name, type, clips.length)} className={`w-full h-full  text-xs border-r-2 border-b-1 border-gray-100 ${color}`}>
+    <div id="infobar" className={`w-full h-full  text-xs border-r-2 border-b-1 border-gray-100 ${color}`}>
       <div className={color}>{name}</div>
 
       <div className="flex">
@@ -43,4 +43,4 @@ const TrackInfo = ({ trackInfo, selectedTrack, position }) => {
   );
 };
 
-export default connect(null, { selectedTrack })(TrackInfo);
+export default connect(null, {})(TrackInfo);

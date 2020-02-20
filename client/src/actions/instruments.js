@@ -1,29 +1,9 @@
-import { BEAT_INST, MELODY_INST, BASS_INST, CHORD_INST } from './types';
+import { ADD_INSTRUMENT } from './types';
 
-export const melodyInstrument = instrument => dispatch => {
+export const addInstrumentAction = (instrument, position) => dispatch => {
   dispatch({
-    type: MELODY_INST,
-    payload: instrument
-  });
-};
-
-export const beatInstrument = instrument => dispatch => {
-  dispatch({
-    type: BEAT_INST,
-    payload: instrument
-  });
-};
-
-export const bassInstrument = instrument => dispatch => {
-  dispatch({
-    type: BASS_INST,
-    payload: instrument
-  });
-};
-
-export const chordInstrument = instrument => dispatch => {
-  dispatch({
-    type: CHORD_INST,
-    payload: instrument
+    type: ADD_INSTRUMENT,
+    payload: instrument,
+    position
   });
 };

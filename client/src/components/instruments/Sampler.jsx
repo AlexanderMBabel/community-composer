@@ -3,7 +3,7 @@ import * as Tone from 'tone';
 // import {} from '../../sounds/drums/KICKS/'
 import Select from 'react-select';
 import { connect } from 'react-redux';
-import { beatInstrument } from '../../actions/instruments';
+
 import PropTypes from 'prop-types';
 import { Knob } from 'react-rotary-knob';
 import { s7 } from 'react-rotary-knob-skin-pack';
@@ -41,8 +41,6 @@ const Sampler = ({ beatInstrument }) => {
     samplerInst.volume.value = volume;
   }, [volume]);
 
-  beatInstrument(samplerInst);
-
   return (
     <div>
       <div className="border shadow-md flex flex-row">
@@ -61,8 +59,6 @@ const Sampler = ({ beatInstrument }) => {
   );
 };
 
-Sampler.protoTypes = {
-  beatInstrument: PropTypes.func.isRequired
-};
+Sampler.protoTypes = {};
 
-export default connect(null, { beatInstrument })(Sampler);
+export default connect(null, {})(Sampler);

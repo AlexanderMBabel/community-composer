@@ -17,10 +17,6 @@ function App() {
         <MainSequence />
         <EditPanel />
       </div>
-      <Melody />
-      <Beat />
-      <Bass />
-      <Chords />
     </div>
   );
 }

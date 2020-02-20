@@ -8,7 +8,6 @@ import Select from 'react-select';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { melodyInstrument, bassInstrument } from '../actions/instruments';
 
 const oscOptions = [
   { value: 'sine', label: 'sine' },
@@ -24,7 +23,7 @@ const instOptions = [
   { value: 'DouSynth', label: 'Dual Osc Synth' }
 ];
 
-const Instrument = ({ section, setInstrument, melodyInstrument, bassInstrument }) => {
+const Instrument = ({}) => {
   const [instrumentType, setInstrumentType] = useState('Synth');
   const [osc, setOsc] = useState('triangle');
   const [envAttack, setEnvAttack] = useState(0);
@@ -117,10 +116,7 @@ const Instrument = ({ section, setInstrument, melodyInstrument, bassInstrument }
 
   const [currentInstrument, setCurrentInstrument] = useState(simple);
 
-  useEffect(() => {
-    melodyInstrument(currentInstrument);
-    bassInstrument(currentInstrument);
-  }, [osc, envAttack, envDecay, envSustain, envRelease, volume]);
+  useEffect(() => {}, [osc, envAttack, envDecay, envSustain, envRelease, volume]);
 
   simple.volume.value = volume;
   simple.detune.value = detune;
@@ -136,38 +132,21 @@ const Instrument = ({ section, setInstrument, melodyInstrument, bassInstrument }
   };
 
   const instrumentChanger = val => {
-    if ((section = 'melody')) {
-      switch (val.value) {
-        case 'Synth':
-          setCurrentInstrument(simple);
-          melodyInstrument(currentInstrument);
-          break;
-        case 'FMSynth':
-          setCurrentInstrument(fmSynth);
-          melodyInstrument(currentInstrument);
-          break;
-        case 'DuoSynth':
-          setCurrentInstrument(duoSynth);
-          melodyInstrument(currentInstrument);
-          break;
-        default:
-          break;
-      }
-    }
-    if ((section = 'bass')) {
-      switch (val.value) {
-        case 'Synth':
-          bassInstrument(simple);
-          break;
-        case 'FMSynth':
-          bassInstrument(fmSynth);
-          break;
-        case 'DuoSynth':
-          bassInstrument(duoSynth);
-          break;
-        default:
-          break;
-      }
+    switch (val.value) {
+      case 'Synth':
+        setCurrentInstrument(simple);
+
+        break;
+      case 'FMSynth':
+        setCurrentInstrument(fmSynth);
+
+        break;
+      case 'DuoSynth':
+        setCurrentInstrument(duoSynth);
+
+        break;
+      default:
+        break;
     }
   };
   return (
@@ -278,9 +257,6 @@ const Instrument = ({ section, setInstrument, melodyInstrument, bassInstrument }
   );
 };
 
-Instrument.protoTypes = {
-  melodyInstrument: PropTypes.func.isRequired,
-  bassInstrument: PropTypes.func.isRequired
-};
+Instrument.protoTypes = {};
 
-export default connect(null, { melodyInstrument, bassInstrument })(Instrument);
+export default connect(null, {})(Instrument);

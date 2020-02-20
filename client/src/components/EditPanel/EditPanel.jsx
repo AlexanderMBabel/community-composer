@@ -12,7 +12,11 @@ const EditPanel = ({ selectedTrack, selectedClip }) => {
   return (
     <div className="w-full bg-gray-300 border-2 rounded shadow-inner border-gray-100 m-2 " style={{ height: '35vh' }}>
       <InstrumentToggle setNoteOrInst={setNoteOrInst} />
-      {noteOrInst === 'note' ? <PianoRoll /> : <ChooseInstrument />}
+      {selectedTrack.type === 'audio' ? (
+        <div className="w-4/5 h-56">Edit Wave</div>
+      ) : (
+        <div className="flex items-center justify-center">{noteOrInst === 'note' ? <PianoRoll /> : <ChooseInstrument />}</div>
+      )}
     </div>
   );
 };

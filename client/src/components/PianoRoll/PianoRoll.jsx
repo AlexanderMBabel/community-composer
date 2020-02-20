@@ -1,15 +1,49 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 import createInitialGrid from '../../utils/createInitialGrid';
 // import playGrid from '../../utils/playGrid';
 import numberToNote from '../../utils/numberToNote';
-import { melodyGrid, bassGrid, updateGrid } from '../../actions/grids';
+
+import { updateClipAction } from '../../actions/tracks';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-const PianoRoll = ({ steps, melodyGrid, melodyInst, melodyEffect1, bassGrid, bassInst, section, updateGrid, gridIsUpdated, selectedClip, selectedTrack, updated, tracks }) => {
+// take in the tracks , selectedTrack.name and selectedClip.name to find the position of the current clip
+const getClipPosition = (tracks, trackName, clipName) => {
+  let trackPosition = 0;
+  let clipPosition = 0;
+
+  //Loop through tracks to find the iteration that track name == current track name
+  for (let i = 0; i < tracks.length; i++) {
+    if (tracks[i].name === trackName) {
+      trackPosition = i;
+    }
+  }
+
+  // Loop through clips of matched track to match to current clip and assign clipPosition the position
+  let clips = tracks[trackPosition].clips;
+  for (let i = 0; i < clips.length; i++) {
+    if (clips[i].name === clipName) {
+      clipPosition = i;
+    }
+  }
+
+  return { trackPosition, clipPosition };
+};
+
+// load instrument
+const loadInstrument = (tracks, trackPosition) => {
+  return tracks[trackPosition].instrument;
+};
+
+// load effects
+const loadEffects = (tracks, trackPosition) => {
+  return tracks[trackPosition].effects;
+};
+
+const PianoRoll = ({ updateClipAction, selectedClip, selectedTrack, updated, tracks }) => {
   // create array of octave
   const numberOfNotes = new Array(12).fill('');
 
@@ -42,12 +76,23 @@ const PianoRoll = ({ steps, melodyGrid, melodyInst, melodyEffect1, bassGrid, bas
   const [notes, setNotes] = useState([]);
 
   const [showBlockValue, setShowBlockValue] = useState(false);
-  const position = useRef({});
+  const [position, setPosition] = useState(null);
+  const [instrument, setInstrument] = useState(null);
+  const [effects, setEffects] = useState(null);
 
   // update notes when current clip is loaded
   useEffect(() => {
-    if (selectedClip !== null) {
+    if (selectedClip !== null && tracks !== null) {
       setNotes(selectedClip.grid);
+
+      setPosition(getClipPosition(tracks, selectedTrack.name, selectedClip.name));
+
+      if (instrument === null && position !== null) {
+        setInstrument(loadInstrument(tracks, position.trackPosition));
+      }
+      if (effects === null && position !== null) {
+        setEffects(loadEffects(tracks, position.trackPosition));
+      }
     }
   }, [updated]);
 
@@ -83,88 +128,105 @@ const PianoRoll = ({ steps, melodyGrid, melodyInst, melodyEffect1, bassGrid, bas
     setNoteName(numberToNote(number));
   };
 
-  // take in the tracks , selectedTrack.name and selectedClip.name to find the position of the current clip
-  const getClipPosition = (tracks, trackName, clipName) => {
-    let trackPosition = 0;
-    let clipPosition = 0;
-
-    //Loop through tracks to find the iteration that track name == current track name
-    for (let i = 0; i < tracks.length; i++) {
-      if (tracks[i].name === trackName) {
-        trackPosition = i;
-      }
+  // function plays note, takes in instrument and an effects array
+  const playNote = (instrument, effects, note) => {
+    // if instrument is loaded
+    if (instrument !== null) {
+      // if there are effects add connect them
+      effects.length > 0 ? instrument.connect(effects).triggerAttack(numberToNote(note)) : instrument.triggerAttack(numberToNote(note));
     }
-
-    // Loop through clips of matched track to match to current clip and assign clipPosition the position
-    let clips = tracks[trackPosition].clips;
-    for (let i = 0; i < clips.length; i++) {
-      if (clips[i].name === clipName) {
-        clipPosition = i;
-      }
-    }
-
-    return { trackPosition, clipPosition };
   };
 
-  //If a clip is selected find the position
-  if (selectedClip !== null) {
-    position.current = getClipPosition(tracks, selectedTrack.name, selectedClip.name);
-  }
-
+  // Handle clicking on a step
   const stepClick = (note, step, stepValue) => {
     let tempNotes = notes;
 
-    if (section === 'melody') {
-      melodyEffect1 ? melodyInst.connect(melodyEffect1, null).triggerAttackRelease(numberToNote(note), 0.5) : melodyInst.triggerAttackRelease(numberToNote(note), 0.5);
-      tempNotes[note][step] = !tempNotes[note][step];
+    //play note
+    playNote(instrument, effects, note);
 
-      setNotes(tempNotes);
+    tempNotes[note][step] = !tempNotes[note][step];
+    setNotes(tempNotes);
+    updateClipAction({ ...selectedClip, grid: notes }, position);
 
-      melodyGrid(notes);
-    }
-    if (section === 'bass') {
-      bassInst.triggerAttackRelease(numberToNote(note + 24), 0.5);
-      tempNotes[note][step] = !tempNotes[note][step];
-
-      setNotes(tempNotes);
-
-      bassGrid(notes);
-    }
-    updateGrid(!gridIsUpdated);
     setShowBlockValue(!showBlockValue);
   };
 
+  // console.log(position);
+  // console.log(instrument);
+  // console.log(effects);
+
+  const instrumentGrid = () => {
+    return (
+      <div className="flex">
+        <div>
+          {coloredKeyArray.map((color, iter) => {
+            if (color === 'w') {
+              return <div key={iter} className="bg-white h-5 w-5"></div>;
+            }
+            if (color === 'b') {
+              return <div key={iter} className="bg-black h-5 w-5"></div>;
+            }
+          })}
+        </div>
+        <div>
+          {selectedClip !== {} &&
+            notes.map((note, noteNumber) => (
+              <div key={noteNumber} className="flex">
+                {note.map((step, stepNumber) => (
+                  <div
+                    key={stepNumber}
+                    className={`h-5 w-10 border border-gray-200 bg-gray-200 px-4 hover:bg-orange-200 ${
+                      notes[noteNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'
+                    } ${(stepNumber + 1) % 4 === 0 && 'border-r-4 '}`}
+                    onMouseOver={() => showNote(noteNumber, stepNumber)}
+                    onClick={() => stepClick(noteNumber, stepNumber, step)}
+                  ></div>
+                ))}
+              </div>
+            ))}
+        </div>
+      </div>
+    );
+  };
+
+  const beatGrid = () => {
+    return (
+      <div className="flex flex-row">
+        <div id="drum-names" className="flex flex-col">
+          <p>Kick</p>
+          <p>Snare</p>
+          <p>Rim</p>
+          <p>Hats Closed</p>
+          <p>Hats Open</p>
+          <p>Crash</p>
+          <p>Ride</p>
+          <p>Mounted Tom</p>
+          <p>Floor Tom</p>
+        </div>
+        <div id="grid">
+          {notes.map((drum, drumNumber) => (
+            <div key={drumNumber} className="flex">
+              {drum.map((step, stepNumber) => (
+                <div
+                  key={stepNumber}
+                  onClick={() => stepClick(drumNumber, stepNumber)}
+                  className={`h-6 w-10 border border-teal-100  px-4 hover:bg-blue-700 ${notes[drumNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'} ${(stepNumber + 1) %
+                    4 ===
+                    0 && 'border-r-4'}`}
+                ></div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
   return (
     <div>
-      <Scrollbars style={{ width: '900px', height: '300px' }}>
+      <Scrollbars style={{ width: '1000px', height: '300px' }}>
         <section id="grid" className="mx-auto container mt-5 flex">
-          <div>
-            {coloredKeyArray.map(color => {
-              if (color === 'w') {
-                return <div className="bg-white h-5 w-5"></div>;
-              }
-              if (color === 'b') {
-                return <div className="bg-black h-5 w-5"></div>;
-              }
-            })}
-          </div>
-          <div>
-            {selectedClip !== {} &&
-              notes.map((note, noteNumber) => (
-                <div key={noteNumber} className="flex">
-                  {note.map((step, stepNumber) => (
-                    <div
-                      key={stepNumber}
-                      className={`h-5 w-10 border border-gray-200 bg-gray-200 px-4 hover:bg-orange-200 ${
-                        notes[noteNumber][stepNumber] ? 'theme-bg-light-tan' : 'theme-bg-gray'
-                      } ${(stepNumber + 1) % 4 === 0 && 'border-r-4 '}`}
-                      onMouseOver={() => showNote(noteNumber, stepNumber)}
-                      onClick={() => stepClick(noteNumber, stepNumber, step)}
-                    ></div>
-                  ))}
-                </div>
-              ))}
-          </div>
+          {selectedTrack.type === 'instrument' || (selectedTrack.type === 'chord' && instrumentGrid())}
+          {selectedTrack.type === 'beats' && beatGrid()}
         </section>
       </Scrollbars>
       <div>{noteName}</div>
@@ -174,28 +236,16 @@ const PianoRoll = ({ steps, melodyGrid, melodyInst, melodyEffect1, bassGrid, bas
 };
 
 PianoRoll.propTypes = {
-  melodyGrid: PropTypes.func,
-  melodyInst: PropTypes.object.isRequired,
-  bassGrid: PropTypes.func.isRequired,
-  bassInst: PropTypes.object.isRequired,
-  updateGrid: PropTypes.func.isRequired,
-  gridIsUpdated: PropTypes.bool.isRequired,
-  steps: PropTypes.number.isRequired,
-
   selectedTrack: PropTypes.object.isRequired,
-  updated: PropTypes.bool.isRequired
+  updated: PropTypes.bool.isRequired,
+  updateClipAction: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  melodyInst: state.instrumentReducer.melodyInst,
-  bassInst: state.instrumentReducer.bassInst,
-  gridIsUpdated: state.sectionsGridReducer.gridUpdated,
-  melodyEffect1: state.audioEffectReducer.melodyEffect1,
-  steps: state.universalReducer.steps,
   selectedClip: state.universalReducer.selectedClip,
   selectedTrack: state.universalReducer.selectedTrack,
   updated: state.universalReducer.updated,
   tracks: state.tracksReducer.tracks
 });
 
-export default connect(mapStateToProps, { melodyGrid, bassGrid, updateGrid })(PianoRoll);
+export default connect(mapStateToProps, { updateClipAction })(PianoRoll);

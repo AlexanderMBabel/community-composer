@@ -3,7 +3,7 @@ import { FMSynth } from 'tone';
 import { Knob } from 'react-rotary-knob';
 import { s8 } from 'react-rotary-knob-skin-pack';
 import { connect } from 'react-redux';
-import { melodyInstrument, bassInstrument } from '../../actions/instruments';
+
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 
@@ -15,7 +15,7 @@ const oscillatorOptions = [
   { value: 'pwm', label: 'pwm' }
 ];
 
-const FrequencyModSynth = ({ melodyInstrument, bassInstrument, section }) => {
+const FrequencyModSynth = ({}) => {
   const [harmonicity, setHarmonicity] = useState(3);
   const [modulationIndex, setModulationIndex] = useState(10);
   const [detune, setDetune] = useState(0);
@@ -56,14 +56,7 @@ const FrequencyModSynth = ({ melodyInstrument, bassInstrument, section }) => {
   };
 
   let fmSynth = new FMSynth(soundSettings).toMaster();
-  useEffect(() => {
-    if (section === 'melody') {
-      melodyInstrument(fmSynth);
-    }
-    if (section === 'bass') {
-      bassInstrument(fmSynth);
-    }
-  }, [fmSynth, bassInstrument, melodyInstrument, section, soundSettings, volume]);
+  useEffect(() => {}, [fmSynth, soundSettings, volume]);
 
   console.log(soundSettings);
 
@@ -276,8 +269,5 @@ const FrequencyModSynth = ({ melodyInstrument, bassInstrument, section }) => {
   );
 };
 
-FrequencyModSynth.prototype = {
-  melodyInstrument: PropTypes.func.isRequired,
-  bassInstrument: PropTypes.func.isRequired
-};
-export default connect(null, { melodyInstrument, bassInstrument })(FrequencyModSynth);
+FrequencyModSynth.propTypes = {};
+export default connect(null, {})(FrequencyModSynth);
