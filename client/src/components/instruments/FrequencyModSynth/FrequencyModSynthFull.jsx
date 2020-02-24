@@ -3,7 +3,7 @@ import { FMSynth } from 'tone';
 import { Knob } from 'react-rotary-knob';
 import { s8 } from 'react-rotary-knob-skin-pack';
 import { connect } from 'react-redux';
-
+import InstrumentContainer from '../Display/InstrumentContainer';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 
@@ -15,7 +15,11 @@ const oscillatorOptions = [
   { value: 'pwm', label: 'pwm' }
 ];
 
-const FrequencyModSynth = ({}) => {
+const FrequencyModSynthFull = ({}) => {
+  //Display State (min,reg,full)
+  const [display, setDisplay] = useState('min');
+
+  // Synth Tweek State
   const [harmonicity, setHarmonicity] = useState(3);
   const [modulationIndex, setModulationIndex] = useState(10);
   const [detune, setDetune] = useState(0);
@@ -270,4 +274,4 @@ const FrequencyModSynth = ({}) => {
 };
 
 FrequencyModSynth.propTypes = {};
-export default connect(null, {})(FrequencyModSynth);
+export default connect(null, {})(FrequencyModSynthFull);

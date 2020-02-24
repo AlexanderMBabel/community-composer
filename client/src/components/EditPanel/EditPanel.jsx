@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import InstrumentToggle from './InstrumentToggle';
 import PropTypes from 'prop-types';
 import PianoRoll from '../PianoRoll/PianoRoll';
-import ChooseInstrument from '../ChooseInstrument';
+import InstrumentPanel from './InstrumentPanel';
 
 // Bottom Panel used to control instruments and edit piano roll
 
@@ -15,7 +15,7 @@ const EditPanel = ({ selectedTrack, selectedClip }) => {
       {selectedTrack.type === 'audio' ? (
         <div className="w-4/5 h-56">Edit Wave</div>
       ) : (
-        <div className="flex items-center justify-center">{noteOrInst === 'note' ? <PianoRoll /> : <ChooseInstrument />}</div>
+        <div className="flex items-center justify-center">{noteOrInst === 'note' ? <PianoRoll /> : <InstrumentPanel />}</div>
       )}
     </div>
   );

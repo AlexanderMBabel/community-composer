@@ -225,7 +225,7 @@ const PianoRoll = ({ updateClipAction, selectedClip, selectedTrack, updated, tra
     <div>
       <Scrollbars style={{ width: '1000px', height: '300px' }}>
         <section id="grid" className="mx-auto container mt-5 flex">
-          {selectedTrack.type === 'instrument' || (selectedTrack.type === 'chord' && instrumentGrid())}
+          {(selectedTrack.type === 'instrument' || selectedTrack.type === 'chord') && instrumentGrid()}
           {selectedTrack.type === 'beats' && beatGrid()}
         </section>
       </Scrollbars>

@@ -4,7 +4,7 @@ import Select from 'react-select';
 import AutoFilter from './AutoFilter';
 import { effectOptions } from '../../utils/selectOptions';
 import { FaPlus } from 'react-icons/fa';
-import { melodyEffect1, melodyEffect2, beatEffect1, beatEffect2, bassEffect1, bassEffect2, chordEffect1, chordEffect2 } from '../../actions/effects';
+// import { melodyEffect1, melodyEffect2, beatEffect1, beatEffect2, bassEffect1, bassEffect2, chordEffect1, chordEffect2 } from '../../actions/effects';
 import { updateGrid } from '../../actions/grids';
 import PropTypes from 'prop-types';
 import BitCrusher from './BitCrusher';

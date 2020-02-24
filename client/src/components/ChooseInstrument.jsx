@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { instrumentOptions } from '../utils/selectOptions';
-import FrequencyModSynth from './instruments/FrequencyModSynth';
+import FrequencyModSynth from './instruments/FrequencyModSynth/FrequencyModSynth';
 import PluckSynth from './instruments/PluckSynth';
 import SimpleSynth from './instruments/SimpleSynth';
 import Select from 'react-select';

@@ -10897,6 +10897,8 @@ video {
 .rotate-90 {
   -webkit-transform: rotate(-90deg);
           transform: rotate(-90deg);
+  background-color: #da7b93;
+  margin-top: 150px;
 }
 
 @media (min-width: 640px){

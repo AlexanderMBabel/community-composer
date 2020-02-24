@@ -14,7 +14,7 @@ const Track = ({ trackInfo, tracks, position, updated, selectedClip, selectedTra
   // // find track by name
 
   return (
-    <div onClick={() => selectedTrack(name, type, clips.length)} className="bg-gray-400 w-full flex flex-row h-32 ">
+    <div onClick={() => selectedTrack(name, type, clips.length, trackInfo, position)} className="bg-gray-400 w-full flex flex-row h-32 ">
       <div className="flex w-full">
         <div className="w-1/5 " id="trackInfoBar">
           <TrackInfo trackInfo={tracks[position]} position={position} />

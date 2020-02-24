@@ -1,4 +1,4 @@
-import { ADD_TRACK, ADD_CLIP, UPDATE_CLIP, REMOVE_CLIP, ADD_INSTRUMENT } from '../actions/types';
+import { ADD_TRACK, ADD_CLIP, UPDATE_CLIP, REMOVE_CLIP, ADD_INSTRUMENT, TWEEK_INSTRUMENT, ADD_EFFECT } from '../actions/types';
 
 const initialState = {
   tracks: [],
@@ -6,7 +6,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  const { type, payload, destinationTrack, position } = action;
+  const { type, payload, destinationTrack, position, instrumentName, settings } = action;
   switch (type) {
     case ADD_TRACK:
       return {
@@ -39,10 +39,29 @@ export default (state = initialState, action) => {
     case REMOVE_CLIP:
       return { updated: !state.updated, tracks: payload };
     case ADD_INSTRUMENT:
-      console.log('fired');
       let tempInstTracks = state.tracks;
       tempInstTracks[position].instrument = payload;
+      tempInstTracks[position].instrumentName = instrumentName;
+      tempInstTracks[position].settings = settings;
       return { tracks: tempInstTracks, updated: !state.updated };
+    case TWEEK_INSTRUMENT:
+      let tempTweekTracks = state.tracks;
+      let tempSettings = tempTweekTracks[position].settings.settings;
+
+      for (let i = 0; i < tempSettings.length; i++) {
+        if (tempSettings[i].name === payload.name) {
+          let matchIndex = i;
+          tempSettings[matchIndex].default = payload.value;
+          tempSettings[matchIndex].value = payload.value;
+
+          tempTweekTracks[position].settings.settings = tempSettings;
+        }
+      }
+
+      return { tracks: tempTweekTracks };
+    case ADD_EFFECT:
+      let tempEffect = state.tracks;
+      tempEffect[position].effects.push({ name: payload.name, effect: payload.effect, settings: payload.settings });
     default:
       return state;
   }

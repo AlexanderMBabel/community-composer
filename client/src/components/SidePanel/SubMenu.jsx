@@ -7,19 +7,21 @@ import * as Tone from 'tone';
 import { addInstrumentAction } from '../../actions/instruments';
 
 import SubMenuItem from './SubMenuItem';
-import { instrumentOptions } from '../../utils/selectOptions';
-import { selectedMenuItem, selectedTrack } from '../../actions/selected';
+
 import PropTypes from 'prop-types';
 import { findPosition } from '../../utils/findPosition';
-import { addClipAction } from '../../actions/tracks';
+import { loadInstrument } from '../../utils/loadInstrument';
+import { loadEffect } from '../../utils/loadEffect';
 
-const dummyMenuItems = ['Sampler', 'FMSynth', 'PolySynth', 'Massivish', 'DuoSynth', 'Pluck', 'Simple', 'Twin', 'Stepper', 'Generated'];
+import { initSettingsInfo, initSettingsInfoWithColor, initEffectSettings } from '../../utils/initSettingsInfo';
+import { addEffect } from '../../actions/effects';
+import { selectedClip } from '../../actions/selected';
 
 const instrumentItems = [
   { type: 'instrument', name: 'Sampler' },
   { type: 'instrument', name: 'FMSynth' },
   { type: 'instrument', name: 'DuoSynth' },
-  { type: 'instrument', name: 'Pluck' }
+  { type: 'instrument', name: 'PluckSynth' }
 ];
 const soundItems = [
   { type: 'sound', name: 'kick' },
@@ -31,11 +33,11 @@ const drums = [
   { type: 'drum', name: 'acoustic' }
 ];
 const audioEffects = [
-  { type: 'effect', name: 'reverb' },
-  { type: 'effect', name: 'distortion' },
-  { type: 'effect', name: 'delay' },
-  { type: 'effect', name: 'chorus' },
-  { type: 'effect', name: 'bitcrusher' }
+  { type: 'effect', name: 'Reverb' },
+  { type: 'effect', name: 'Distortion' },
+  { type: 'effect', name: 'Delay' },
+  { type: 'effect', name: 'Chorus' },
+  { type: 'effect', name: 'Phaser' }
 ];
 const midiEffects = [
   { type: 'midiEffect', name: 'stutter' },
@@ -43,7 +45,16 @@ const midiEffects = [
   { type: 'midiEffect', name: 'scales' },
   { type: 'midiEffect', name: 'pitch' }
 ];
-const SubMenu = ({ selectedMenuItem, addInstrumentAction, selectedTrack, tracks }) => {
+
+const getSettings = name => {
+  const settingsInfo = initSettingsInfoWithColor();
+  return settingsInfo.find(setting => setting.name === name);
+};
+
+const getEffectSettings = name => {
+  return initEffectSettings.find(setting => setting.name === name);
+};
+const SubMenu = ({ selectedMenuItem, addInstrumentAction, selectedTrack, tracks, addEffect }) => {
   const [submenu, setSubmenu] = useState([]);
   const [errors, setErrors] = useState([]);
   const [position, setPosition] = useState(null);
@@ -84,15 +95,23 @@ const SubMenu = ({ selectedMenuItem, addInstrumentAction, selectedTrack, tracks 
     const name = e.currentTarget.dataset.name;
     const type = e.currentTarget.dataset.type;
 
-    console.log(name);
-
     if (selectedTrack.name !== null) {
-      console.log(type);
-      if (type === 'instrument') {
-        addInstrumentAction(name, position.track);
+      if (selectedTrack.type === 'instrument' || selectedTrack.type === 'chord') {
+        if (type === 'instrument') {
+          let newInstrument = loadInstrument(name);
+          addInstrumentAction(newInstrument, position.track, name, getSettings(name));
+        }
+      }
+
+      if (type === 'effect') {
+        let effect = loadEffect(name);
+        let currentEffects = tracks[position.track].effects;
+        if (cuurentEffects.findindex(effect => effect.name === name) === -1) {
+          addEffect(effect, position.track, name, getEffectSettings(name));
+        }
       }
     } else {
-      setErrors([...errors, 'select a track then click an instrument or drag instrument to track']);
+      setErrors([...errors, 'select a track then click a unit or drag to track']);
     }
   };
 
@@ -124,7 +143,8 @@ const SubMenu = ({ selectedMenuItem, addInstrumentAction, selectedTrack, tracks 
 SubMenu.propTypes = {
   addInstrumentAction: PropTypes.func.isRequired,
   selectedTrack: PropTypes.object.isRequired,
-  selectedMenuItem: PropTypes.string
+  selectedMenuItem: PropTypes.string,
+  addEffect: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -132,4 +152,4 @@ const mapStateToProps = state => ({
   selectedTrack: state.universalReducer.selectedTrack,
   tracks: state.tracksReducer.tracks
 });
-export default connect(mapStateToProps, { addInstrumentAction })(SubMenu);
+export default connect(mapStateToProps, { addInstrumentAction, addEffect })(SubMenu);
