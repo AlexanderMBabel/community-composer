@@ -106,7 +106,7 @@ const SubMenu = ({ selectedMenuItem, addInstrumentAction, selectedTrack, tracks,
       if (type === 'effect') {
         let effect = loadEffect(name);
         let currentEffects = tracks[position.track].effects;
-        if (cuurentEffects.findindex(effect => effect.name === name) === -1) {
+        if (cuurentEffects.findindex(effect => effect.name === name) === -1 && currentEffects.length < 4) {
           addEffect(effect, position.track, name, getEffectSettings(name));
         }
       }
